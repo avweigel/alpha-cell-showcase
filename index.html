@@ -8,7 +8,9 @@
 <style>
   :root{
     --bg:#0d1420; --panel:#121c2c; --panel2:#0f1826; --line:#1f2d42;
-    --text:#dce6f5; --dim:#8fa2bd; --accent:#5eb1ff; --accent2:#ffb35e;
+    --text:#dce6f5; --dim:#8fa2bd; --muted:#6b7d99;
+    --accent:#5eb1ff; --accent2:#ffb35e;
+    --chem:#3987e5; --cryo:#d95926;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--text);
@@ -16,12 +18,13 @@
   a{color:var(--accent);text-decoration:none}
   a:hover{text-decoration:underline}
   .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
-  header{padding:64px 0 36px;border-bottom:1px solid var(--line)}
+  header{padding:64px 0 40px;border-bottom:1px solid var(--line)}
   h1{font-size:2.1rem;margin:0 0 8px;font-weight:650;letter-spacing:.01em}
-  .sub{color:var(--dim);max-width:820px}
-  h2{font-size:1.35rem;margin:0 0 6px;font-weight:600}
-  section{padding:44px 0;border-bottom:1px solid var(--line)}
-  .lead{color:var(--dim);max-width:860px;margin:0 0 26px}
+  .sub{color:var(--dim);max-width:840px}
+  h2{font-size:1.5rem;margin:0 0 4px;font-weight:650}
+  .kicker{color:var(--accent2);font-size:.8rem;text-transform:uppercase;letter-spacing:.14em;margin:0 0 8px;font-weight:600}
+  section{padding:52px 0;border-bottom:1px solid var(--line)}
+  .lead{color:var(--dim);max-width:880px;margin:0 0 26px}
   .grid{display:grid;gap:20px}
   .grid.two{grid-template-columns:repeat(auto-fit,minmax(440px,1fr))}
   .grid.three{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
@@ -34,12 +37,23 @@
   model-viewer{width:100%;height:420px;background:#0a111c;--poster-color:#0a111c;display:block}
   video,img.still{width:100%;display:block;background:#0a111c}
   .hint{font-size:.8rem;color:var(--dim);padding:6px 16px 0}
-  .legend{font-size:.82rem;color:var(--dim);margin:14px 0 0}
-  .legend b{color:var(--text);font-weight:600}
+  .legend{display:flex;gap:18px;font-size:.82rem;color:var(--dim);margin:2px 0 8px;flex-wrap:wrap}
+  .legend .sw{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
   .chip{display:inline-block;width:11px;height:11px;border-radius:2px;margin:0 4px -1px 10px}
-  table{border-collapse:collapse;width:100%;font-size:.88rem;margin-top:18px}
-  th,td{text-align:left;padding:7px 12px;border-bottom:1px solid var(--line)}
-  th{color:var(--dim);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+  .gfx{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px;margin:8px 0 0}
+  .chart-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+              padding:20px 22px 16px;margin:0 0 22px}
+  .chart-card h3{margin:0 0 2px;font-size:1.05rem;font-weight:600}
+  .chart-card .csub{color:var(--dim);font-size:.85rem;margin:0 0 12px}
+  svg{display:block;width:100%;height:auto}
+  svg text{font-family:inherit}
+  .tick{fill:var(--muted);font-size:11px}
+  .rowlab{fill:var(--text);font-size:12px}
+  .grouplab{fill:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+  .grid-l{stroke:var(--line);stroke-width:1}
+  .tt{position:fixed;pointer-events:none;background:#182338;border:1px solid #2b3c58;color:var(--text);
+      font-size:12px;line-height:1.45;padding:7px 10px;border-radius:7px;opacity:0;transition:opacity .08s;z-index:10;max-width:260px}
+  .tt b{color:#fff}
   .datasets{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
   .ds{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
   .ds h3{margin:0 0 2px;font-size:.95rem}
@@ -49,104 +63,336 @@
 </style>
 </head>
 <body>
+<div id="tt" class="tt"></div>
 
 <header>
   <div class="wrap">
     <h1>Alpha Cell — membrane landscapes</h1>
-    <p class="sub">Cell membranes reconstructed from isotropic FIB-SEM volumes of mouse tissue
-    (4–8&nbsp;nm voxels), from the Janelia CellMap / OpenOrganelle collection. Every surface below is
-    real segmented data, not an illustration: each patch is a piece of a cell's boundary, one to a few
-    micrometres across, colored by a quantitative property of the surface. Drag the 3D models to
-    explore them.</p>
+    <p class="sub">Cell membranes reconstructed from isotropic FIB-SEM volumes of mouse tissue,
+    from the Janelia CellMap / OpenOrganelle collection. Everything on this page is real segmented
+    data, not an illustration — and every surface can be measured, not just admired. Three things
+    to take away: the <b>size</b> of these datasets, the <b>resolution</b> they hold, and the
+    <b>quantification</b> they make possible.</p>
   </div>
 </header>
 
-<section id="interactive">
+<!-- ================= OPENER MOVIE ================= -->
+<section id="opener">
   <div class="wrap">
-    <h2>Touch the data</h2>
-    <p class="lead">These are live 3D meshes — drag to rotate, scroll to zoom, right-drag to pan.
-    Color encodes a measurement made at every point on the membrane.</p>
+    <div class="card">
+      <video src="assets/video/stylet_flythrough.mp4" poster="assets/img/stylet_poster.jpg"
+             controls preload="none" style="aspect-ratio:16/9"></video>
+      <div class="body">
+        <h3>Two minutes through one dataset</h3>
+        <div class="meta">A mosquito stylet, imaged end to end with FIB-SEM: the fly-through starts in
+        the raw electron microscopy (scale bar 1 µm) and ends in the full 3D reconstruction with every
+        cell segmented (scale bar 10 µm). One continuous volume, from organ scale down to membranes —
+        Janelia CellMap, manuscript in preparation.</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <p class="legend">
-      <b>Curvature</b><span class="chip" style="background:#b2182b"></span>convex
-      <span class="chip" style="background:#2166ac"></span>concave &nbsp;·&nbsp;
-      <b>Contact gap</b> — distance to the neighboring cell across the extracellular space &nbsp;·&nbsp;
-      <b>Deviation</b> — protrusions and indentations relative to the smoothed surface
-    </p>
+<!-- ================= 1. SCALE ================= -->
+<section id="scale">
+  <div class="wrap">
+    <p class="kicker">1 · Scale</p>
+    <h2>Whole tissue, without losing the detail</h2>
+    <p class="lead">A single FIB-SEM dataset here spans tens to hundreds of micrometres of intact
+    tissue — thousands of cells in their native context — yet stays sharp down to the width of a
+    single membrane. That span, six orders of magnitude in one dataset, is what makes this data
+    different from either light microscopy (big but blurry) or classical EM (sharp but tiny).</p>
 
-    <div class="grid two" style="margin-top:22px">
+    <div class="gfx">
+    <svg viewBox="0 0 1000 300" role="img" aria-label="Scale journey from tissue to lipid bilayer">
+      <defs>
+        <linearGradient id="axisg" gradientUnits="userSpaceOnUse" x1="60" y1="190" x2="940" y2="190">
+          <stop offset="0" stop-color="#5eb1ff"/><stop offset="1" stop-color="#ffb35e"/>
+        </linearGradient>
+      </defs>
+      <line x1="60" y1="190" x2="940" y2="190" stroke="url(#axisg)" stroke-width="3"/>
+      <g fill="#6b7d99" font-size="12" text-anchor="middle">
+        <g stroke="#33455f" stroke-width="1.5">
+          <line x1="60"  y1="184" x2="60"  y2="196"/><line x1="206.7" y1="184" x2="206.7" y2="196"/>
+          <line x1="353.3" y1="184" x2="353.3" y2="196"/><line x1="500" y1="184" x2="500" y2="196"/>
+          <line x1="646.7" y1="184" x2="646.7" y2="196"/><line x1="793.3" y1="184" x2="793.3" y2="196"/>
+          <line x1="940" y1="184" x2="940" y2="196"/>
+        </g>
+        <text x="60" y="215">1 mm</text><text x="206.7" y="215">100 µm</text>
+        <text x="353.3" y="215">10 µm</text><text x="500" y="215">1 µm</text>
+        <text x="646.7" y="215">100 nm</text><text x="793.3" y="215">10 nm</text>
+        <text x="940" y="215">1 nm</text>
+      </g>
+      <g>
+        <path d="M40 96 l30 -12 l24 10 l-2 22 l-28 12 l-26 -10 z" fill="#22344e" stroke="#5eb1ff" stroke-width="1.4"/>
+        <line x1="62" y1="134" x2="62" y2="182" stroke="#33455f" stroke-width="1.2"/>
+        <text x="62" y="72" fill="#dce6f5" font-size="13" font-weight="600" text-anchor="middle">tissue sample</text>
+        <text x="62" y="88" fill="#8fa2bd" font-size="11" text-anchor="middle">~ millimetres</text>
+      </g>
+      <g>
+        <path d="M210 100 l26 -10 l22 8 l0 24 l-26 10 l-22 -8 z" fill="#1b2c44" stroke="#5eb1ff" stroke-width="1.4"/>
+        <path d="M210 100 l26 -10 l22 8 l-26 10 z" fill="#2a4266" stroke="#5eb1ff" stroke-width="1"/>
+        <line x1="232" y1="134" x2="232" y2="182" stroke="#33455f" stroke-width="1.2"/>
+        <text x="232" y="72" fill="#dce6f5" font-size="13" font-weight="600" text-anchor="middle">FIB-SEM volume</text>
+        <text x="232" y="88" fill="#8fa2bd" font-size="11" text-anchor="middle">tens–hundreds of µm</text>
+      </g>
+      <g>
+        <path d="M441 106 l18 -7 l15 6 l0 16 l-18 7 l-15 -6 z" fill="#1b2c44" stroke="#8fd0ff" stroke-width="1.3"/>
+        <line x1="456" y1="130" x2="456" y2="182" stroke="#33455f" stroke-width="1.2"/>
+        <text x="456" y="72" fill="#dce6f5" font-size="13" font-weight="600" text-anchor="middle">membrane patch</text>
+        <text x="456" y="88" fill="#8fa2bd" font-size="11" text-anchor="middle">1–7 µm — the models on this page</text>
+      </g>
+      <g>
+        <path d="M706 96 q10 8 0 18 q-8 8 0 16" fill="none" stroke="#ffb35e" stroke-width="2"/>
+        <path d="M742 96 q-10 8 0 18 q8 8 0 16" fill="none" stroke="#ffb35e" stroke-width="2"/>
+        <line x1="724" y1="136" x2="724" y2="182" stroke="#33455f" stroke-width="1.2"/>
+        <text x="724" y="72" fill="#dce6f5" font-size="13" font-weight="600" text-anchor="middle">cell–cell gap</text>
+        <text x="724" y="88" fill="#8fa2bd" font-size="11" text-anchor="middle">~10–100 nm</text>
+      </g>
+      <g>
+        <rect x="846" y="102" width="16" height="16" fill="none" stroke="#ffb35e" stroke-width="1.6"/>
+        <line x1="854" y1="126" x2="854" y2="182" stroke="#33455f" stroke-width="1.2"/>
+        <text x="854" y="72" fill="#dce6f5" font-size="13" font-weight="600" text-anchor="middle">voxel · bilayer</text>
+        <text x="854" y="88" fill="#8fa2bd" font-size="11" text-anchor="middle">4–8 nm</text>
+      </g>
+      <g font-size="11.5" fill="#8fa2bd" text-anchor="middle">
+        <text x="176" y="252">a red blood cell is ~8 µm →</text>
+        <text x="500" y="252">← every model on this page fits inside one cell</text>
+        <text x="830" y="252">← same data still sharp down here</text>
+      </g>
+      <text x="500" y="286" fill="#5eb1ff" font-size="13" font-weight="600" text-anchor="middle">one dataset spans this whole line — six orders of magnitude, no gaps</text>
+    </svg>
+    </div>
 
+    <p class="lead" style="margin-top:26px">The full volumes are public and browsable in the browser —
+    open any dataset below in Neuroglancer and fly through the tissue yourself. No install, no login.</p>
+    <div class="datasets">
+      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-liver" target="_blank" rel="noopener">jrc_mus-liver</a></h3><div class="meta">Mouse liver · chemical · 8 nm</div></div>
+      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-liver-8" target="_blank" rel="noopener">jrc_mus-liver-8</a></h3><div class="meta">Mouse liver · rapid cryo · 8 nm</div></div>
+      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-kidney" target="_blank" rel="noopener">jrc_mus-kidney</a></h3><div class="meta">Mouse kidney · chemical · 8 nm</div></div>
+      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-kidney-4" target="_blank" rel="noopener">jrc_mus-kidney-4</a></h3><div class="meta">Mouse kidney · rapid cryo · 8 nm</div></div>
+      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-heart-6" target="_blank" rel="noopener">jrc_mus-heart-6</a></h3><div class="meta">Mouse heart · chemical · 8 nm</div></div>
+      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-heart-4" target="_blank" rel="noopener">jrc_mus-heart-4</a></h3><div class="meta">Mouse heart · rapid cryo · 8 nm</div></div>
+      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-cortex-3" target="_blank" rel="noopener">jrc_mus-cortex-3</a></h3><div class="meta">Mouse cortex · chemical · 4 nm</div></div>
+      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-cortex-4" target="_blank" rel="noopener">jrc_mus-cortex-4</a></h3><div class="meta">Mouse cortex · rapid cryo · 8 nm</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 2. RESOLUTION ================= -->
+<section id="resolution">
+  <div class="wrap">
+    <p class="kicker">2 · Resolution</p>
+    <h2>Down to the membrane itself</h2>
+    <p class="lead">The voxels are 4–8 nm on a side — the scale of the lipid bilayer. At that
+    resolution the surface of a cell stops being a smooth cartoon: every fold, protrusion and
+    contact is real geometry. These are live 3D models — <b>drag to rotate, scroll to zoom</b>.
+    Zoom all the way in: the detail keeps going.</p>
+
+    <div class="grid two">
+      <div class="card">
+        <model-viewer src="assets/glb/crop1033_curvature.glb" poster="assets/img/gal_crop1033_curvature_A.jpg"
+          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none"></model-viewer>
+        <div class="hint">drag · scroll · pan</div>
+        <div class="body">
+          <h3>Cortex — unmyelinated nerve fibers</h3>
+          <div class="meta">The finest data here: 4 nm voxels (jrc_mus-cortex-3, chemical fixation).
+          The whole patch is smaller than a single mitochondrion is long.</div>
+          <span class="scale">≈ 0.9 × 0.9 × 0.8 µm</span>
+        </div>
+      </div>
       <div class="card">
         <model-viewer src="assets/glb/crop1072_curvature.glb" poster="assets/img/crop1072_curvature_sideA.jpg"
           camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none"></model-viewer>
         <div class="hint">drag · scroll · pan</div>
         <div class="body">
-          <h3>Liver — bile canaliculus, curvature</h3>
-          <div class="meta">Rapid cryo (high-pressure frozen) · jrc_mus-liver-8 · 8 nm voxels</div>
+          <h3>Liver — bile canaliculus</h3>
+          <div class="meta">Rapid cryo (high-pressure frozen), jrc_mus-liver-8, 8 nm voxels. Color is
+          mean curvature: red convex, blue concave — measured at every point on the surface.</div>
           <span class="scale">≈ 2.3 × 1.2 × 2.3 µm</span>
         </div>
       </div>
+    </div>
 
+    <p class="legend" style="margin-top:18px">
+      <b>Color legends for the models on this page</b> —
+      <b>Curvature</b><span class="chip" style="background:#b2182b"></span>convex
+      <span class="chip" style="background:#2166ac"></span>concave &nbsp;·&nbsp;
+      <b>Contact gap</b>: distance to the neighboring cell &nbsp;·&nbsp;
+      <b>Deviation</b>: protrusions and indentations vs the smoothed surface
+    </p>
+  </div>
+</section>
+
+<!-- ================= 3. QUANTIFICATION ================= -->
+<section id="quant">
+  <div class="wrap">
+    <p class="kicker">3 · Quantification</p>
+    <h2>Not just a pretty picture</h2>
+    <p class="lead">Because every voxel is labeled, the geometry is measurable: how wide the space
+    between cells is, how much of a membrane sits in contact with its neighbor, how rough or curved
+    or folded a surface is — per point, per cell, per region, per preservation method. The models
+    below aren't colored for looks; the color <i>is</i> the measurement.</p>
+
+    <div class="grid two" style="margin-bottom:26px">
       <div class="card">
         <model-viewer src="assets/glb/crop1072_gap.glb" poster="assets/img/crop1072_gap_sideA.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none"></model-viewer>
+          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
         <div class="hint">drag · scroll · pan</div>
         <div class="body">
-          <h3>Liver — bile canaliculus, contact gap</h3>
-          <div class="meta">Rapid cryo · jrc_mus-liver-8 · same patch as left, different measurement</div>
+          <h3>A measurement you can touch</h3>
+          <div class="meta">Liver bile canaliculus, colored by the local distance to the neighboring
+          cell — contact sites and open channels read directly off the surface.</div>
           <span class="scale">≈ 2.3 × 1.2 × 2.3 µm</span>
         </div>
       </div>
-
-      <div class="card">
-        <model-viewer src="assets/glb/crop1027_curvature.glb" poster="assets/img/crop1027_curvature_sideA.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
-        <div class="hint">drag · scroll · pan</div>
-        <div class="body">
-          <h3>Kidney — glomerular interstitium, curvature</h3>
-          <div class="meta">Chemical fixation · jrc_mus-kidney · 8 nm voxels</div>
-          <span class="scale">≈ 1.1 × 2.3 × 2.3 µm</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <model-viewer src="assets/glb/crop1151_curvature.glb" poster="assets/img/crop1151_curvature_sideA.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
-        <div class="hint">drag · scroll · pan</div>
-        <div class="body">
-          <h3>Heart — intercalated disc, curvature</h3>
-          <div class="meta">Rapid cryo · jrc_mus-heart-4 · 8 nm voxels</div>
-          <span class="scale">≈ 3.9 × 0.7 × 2.3 µm</span>
-        </div>
-      </div>
-
       <div class="card">
         <model-viewer src="assets/glb/crop1144_deviation.glb" poster="assets/img/crop1144_deviation_sideA.jpg"
           camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
         <div class="hint">drag · scroll · pan</div>
         <div class="body">
-          <h3>Kidney — tubule base, protrusions</h3>
-          <div class="meta">Rapid cryo · jrc_mus-kidney-4 · surface deviation highlights membrane protrusions</div>
+          <h3>Membrane topology, mapped</h3>
+          <div class="meta">Kidney tubule base, colored by deviation from the smoothed surface —
+          every protrusion and indentation detected and countable.</div>
           <span class="scale">≈ 2.3 × 7.1 × 1.5 µm</span>
         </div>
       </div>
+    </div>
 
-      <div class="card">
-        <model-viewer src="assets/glb/crop1033_curvature.glb" poster="assets/img/gal_crop1033_curvature_A.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
-        <div class="hint">drag · scroll · pan</div>
-        <div class="body">
-          <h3>Cortex — unmyelinated nerve fibers, curvature</h3>
-          <div class="meta">Chemical fixation · jrc_mus-cortex-3 · 4 nm voxels — the finest resolution here</div>
-          <span class="scale">≈ 0.9 × 0.9 × 0.8 µm</span>
-        </div>
-      </div>
+    <div class="chart-card">
+      <h3>The space between cells, measured</h3>
+      <p class="csub">Extracellular gap width — dot = median, bar = 10th–90th percentile. Each row is one imaged tissue volume. Hover any row.</p>
+      <div class="legend"><span><span class="sw" style="background:var(--chem)"></span>Chemical fixation</span>
+      <span><span class="sw" style="background:var(--cryo)"></span>Rapid cryo (high-pressure frozen)</span></div>
+      <div id="chartWidth"></div>
+    </div>
 
+    <div class="chart-card">
+      <h3>Contact sites, quantified</h3>
+      <p class="csub">Fraction of the cell boundary within 40 nm of the neighboring cell — how much of each membrane is effectively "in contact".</p>
+      <div class="legend"><span><span class="sw" style="background:var(--chem)"></span>Chemical fixation</span>
+      <span><span class="sw" style="background:var(--cryo)"></span>Rapid cryo</span></div>
+      <div id="chartContact"></div>
+    </div>
+
+    <div class="chart-card">
+      <h3>Every metric, every region</h3>
+      <p class="csub">Effect size (Cliff's δ) for chemical vs rapid-cryo preservation across the metric suite.
+      Red = larger under chemical fixation, blue = larger under cryo. Hover any cell.</p>
+      <div id="chartMatrix"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WORKFLOW ================= -->
+<section id="workflow">
+  <div class="wrap">
+    <p class="kicker">How it's made</p>
+    <h2>From organ to numbers</h2>
+    <p class="lead">The same tissues go down two preservation routes and through one identical
+    pipeline — so any difference we measure is the preparation, not the processing.</p>
+    <div class="gfx">
+    <svg viewBox="0 0 1000 310" role="img" aria-label="Workflow from tissue to quantification">
+      <defs>
+        <marker id="warr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto">
+          <path d="M0 0 L8 4 L0 8 z" fill="#5eb1ff"/>
+        </marker>
+      </defs>
+      <g font-size="13" font-weight="600" fill="#dce6f5" text-anchor="middle">
+        <text x="100" y="34">1 · Tissue</text><text x="300" y="34">2 · Preserve</text>
+        <text x="500" y="34">3 · FIB-SEM</text><text x="700" y="34">4 · Segment</text>
+        <text x="900" y="34">5 · Measure</text>
+      </g>
+      <g fill="#0f1826" stroke="#1f2d42">
+        <rect x="30" y="48" width="140" height="180" rx="10"/><rect x="230" y="48" width="140" height="180" rx="10"/>
+        <rect x="430" y="48" width="140" height="180" rx="10"/><rect x="630" y="48" width="140" height="180" rx="10"/>
+        <rect x="830" y="48" width="140" height="180" rx="10"/>
+      </g>
+      <g stroke="#5eb1ff" stroke-width="2" marker-end="url(#warr)">
+        <line x1="174" y1="138" x2="224" y2="138"/><line x1="374" y1="138" x2="424" y2="138"/>
+        <line x1="574" y1="138" x2="624" y2="138"/><line x1="774" y1="138" x2="824" y2="138"/>
+      </g>
+      <g>
+        <path d="M70 108 q-14 -20 8 -26 q6 -14 22 -8 q18 -8 22 8 q20 8 6 26 q4 22 -20 20 q-8 10 -18 2 q-22 4 -20 -22 z"
+              fill="#22344e" stroke="#5eb1ff" stroke-width="1.4"/>
+        <text x="100" y="168" fill="#8fa2bd" font-size="11" text-anchor="middle">mouse liver · kidney</text>
+        <text x="100" y="184" fill="#8fa2bd" font-size="11" text-anchor="middle">heart · cortex</text>
+      </g>
+      <g font-size="11" text-anchor="middle">
+        <rect x="248" y="70" width="104" height="52" rx="8" fill="#16263c" stroke="#3987e5" stroke-width="1.3"/>
+        <text x="300" y="92" fill="#dce6f5" font-weight="600">chemical</text>
+        <text x="300" y="108" fill="#8fa2bd">aldehyde fixation</text>
+        <rect x="248" y="140" width="104" height="52" rx="8" fill="#16263c" stroke="#d95926" stroke-width="1.3"/>
+        <text x="300" y="162" fill="#dce6f5" font-weight="600">rapid cryo</text>
+        <text x="300" y="178" fill="#8fa2bd">high-pressure frozen</text>
+        <text x="300" y="214" fill="#6b7d99" font-size="10.5">same tissues, both routes</text>
+      </g>
+      <g>
+        <path d="M455 78 l40 34" stroke="#ffb35e" stroke-width="2"/>
+        <path d="M545 78 l-40 34" stroke="#8fd0ff" stroke-width="2"/>
+        <text x="462" y="72" fill="#ffb35e" font-size="10.5">ion beam</text>
+        <text x="516" y="72" fill="#8fd0ff" font-size="10.5">e⁻ beam</text>
+        <path d="M470 112 l30 -12 l26 10 l0 34 l-30 12 l-26 -10 z" fill="#1b2c44" stroke="#5eb1ff" stroke-width="1.4"/>
+        <path d="M470 112 l30 -12 l26 10 l-30 12 z" fill="#2a4266" stroke="#5eb1ff" stroke-width="1"/>
+        <g stroke="#33455f" stroke-width="1"><line x1="474" y1="124" x2="522" y2="124"/><line x1="474" y1="132" x2="522" y2="132"/><line x1="474" y1="140" x2="522" y2="140"/></g>
+        <text x="500" y="178" fill="#8fa2bd" font-size="11" text-anchor="middle">image · mill 4–8 nm</text>
+        <text x="500" y="194" fill="#8fa2bd" font-size="11" text-anchor="middle">repeat ×10,000s</text>
+      </g>
+      <g>
+        <rect x="648" y="80" width="46" height="46" rx="4" fill="#25303f"/>
+        <circle cx="662" cy="96" r="7" fill="#3a4a5e"/><circle cx="680" cy="112" r="9" fill="#31404f"/>
+        <path d="M700 103 l14 0" stroke="#5eb1ff" stroke-width="2" marker-end="url(#warr)"/>
+        <rect x="708" y="80" width="46" height="46" rx="4" fill="#1b2c44"/>
+        <circle cx="722" cy="96" r="7" fill="#3987e5"/><circle cx="740" cy="112" r="9" fill="#d95926"/>
+        <path d="M708 80 h46 v14 q-24 10 -46 0 z" fill="#199e70" opacity="0.7"/>
+        <text x="671" y="140" fill="#6b7d99" font-size="10" text-anchor="middle">raw EM</text>
+        <text x="731" y="140" fill="#6b7d99" font-size="10" text-anchor="middle">labels</text>
+        <text x="700" y="162" fill="#8fa2bd" font-size="11" text-anchor="middle">every voxel labeled:</text>
+        <text x="700" y="178" fill="#8fa2bd" font-size="11" text-anchor="middle">cell · extracellular space</text>
+        <text x="700" y="194" fill="#8fa2bd" font-size="11" text-anchor="middle">organelles</text>
+      </g>
+      <g>
+        <path d="M848 96 q14 -18 34 -8 q20 -12 32 4 q12 14 -6 24 q-2 16 -20 12 q-16 8 -26 -4 q-18 -2 -14 -28 z"
+              fill="none" stroke="#e66767" stroke-width="1.6"/>
+        <g stroke="#3987e5" stroke-width="2">
+          <line x1="856" y1="176" x2="856" y2="152"/><line x1="872" y1="176" x2="872" y2="142"/>
+          <line x1="888" y1="176" x2="888" y2="160"/><line x1="904" y1="176" x2="904" y2="134"/>
+          <line x1="920" y1="176" x2="920" y2="148"/>
+        </g>
+        <line x1="848" y1="176" x2="952" y2="176" stroke="#33455f" stroke-width="1.5"/>
+        <text x="900" y="200" fill="#8fa2bd" font-size="11" text-anchor="middle">curvature · gaps · contacts</text>
+        <text x="900" y="216" fill="#8fa2bd" font-size="11" text-anchor="middle">topology · statistics</text>
+      </g>
+      <text x="500" y="278" fill="#8fa2bd" font-size="12.5" text-anchor="middle">two preservation routes, one identical pipeline — differences are the preparation, not the processing</text>
+    </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MORE MODELS / MOVIES / GALLERY ================= -->
+<section id="more">
+  <div class="wrap">
+    <h2>More to explore</h2>
+    <p class="lead">Turntable loops (good for slides), the rest of the interactive models, and rendered stills.</p>
+
+    <div class="grid two">
+      <div class="card"><video src="assets/video/turntable_crop1072_gap.mp4" autoplay loop muted playsinline></video>
+        <div class="body"><h3>Liver — bile canaliculus, contact gap</h3><div class="meta">Rapid cryo · jrc_mus-liver-8</div></div></div>
+      <div class="card"><video src="assets/video/turntable_crop1027_curvature.mp4" autoplay loop muted playsinline></video>
+        <div class="body"><h3>Kidney — glomerular, curvature</h3><div class="meta">Chemical · jrc_mus-kidney</div></div></div>
+      <div class="card"><video src="assets/video/turntable_crop1151_curvature.mp4" autoplay loop muted playsinline></video>
+        <div class="body"><h3>Heart — intercalated disc, curvature</h3><div class="meta">Rapid cryo · jrc_mus-heart-4</div></div></div>
+      <div class="card"><video src="assets/video/turntable_crop1144_deviation.mp4" autoplay loop muted playsinline></video>
+        <div class="body"><h3>Kidney — tubule base, protrusions</h3><div class="meta">Rapid cryo · jrc_mus-kidney-4</div></div></div>
     </div>
 
     <details style="margin-top:26px">
-      <summary style="cursor:pointer;color:var(--accent)">More interactive patches (8 more — loads ~18 MB)</summary>
+      <summary style="cursor:pointer;color:var(--accent)">All remaining interactive models (10 more — loads ~25 MB)</summary>
       <div class="grid two" style="margin-top:18px">
+        <div class="card"><model-viewer src="assets/glb/crop1027_curvature.glb" poster="assets/img/crop1027_curvature_sideA.jpg" camera-controls auto-rotate exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
+          <div class="body"><h3>Kidney — glomerular, curvature</h3><div class="meta">Chemical · jrc_mus-kidney</div><span class="scale">≈ 1.1 × 2.3 × 2.3 µm</span></div></div>
+        <div class="card"><model-viewer src="assets/glb/crop1151_curvature.glb" poster="assets/img/crop1151_curvature_sideA.jpg" camera-controls auto-rotate exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
+          <div class="body"><h3>Heart — intercalated disc, curvature</h3><div class="meta">Rapid cryo · jrc_mus-heart-4</div><span class="scale">≈ 3.9 × 0.7 × 2.3 µm</span></div></div>
         <div class="card"><model-viewer src="assets/glb/crop1026_curvature.glb" poster="assets/img/gal_crop1026_curvature_A.jpg" camera-controls auto-rotate exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
           <div class="body"><h3>Kidney — glomerular, curvature</h3><div class="meta">Chemical · jrc_mus-kidney</div><span class="scale">≈ 1.1 × 2.1 × 2.3 µm</span></div></div>
         <div class="card"><model-viewer src="assets/glb/crop1026_gap.glb" poster="assets/img/crop1026_gap_sideA.jpg" camera-controls auto-rotate exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
@@ -165,112 +411,155 @@
           <div class="body"><h3>Heart — intercalated disc, contact gap</h3><div class="meta">Rapid cryo · jrc_mus-heart-4</div><span class="scale">≈ 1.5 × 1.3 × 1.3 µm</span></div></div>
       </div>
     </details>
-  </div>
-</section>
 
-<section id="video">
-  <div class="wrap">
-    <h2>Turntables</h2>
-    <p class="lead">Short loops for slides or a quick sense of the 3D structure without loading the meshes.</p>
-    <div class="grid two">
-      <div class="card"><video src="assets/video/turntable_crop1072_gap.mp4" autoplay loop muted playsinline></video>
-        <div class="body"><h3>Liver — bile canaliculus, contact gap</h3><div class="meta">Rapid cryo · jrc_mus-liver-8</div></div></div>
-      <div class="card"><video src="assets/video/turntable_crop1027_curvature.mp4" autoplay loop muted playsinline></video>
-        <div class="body"><h3>Kidney — glomerular, curvature</h3><div class="meta">Chemical · jrc_mus-kidney</div></div></div>
-      <div class="card"><video src="assets/video/turntable_crop1151_curvature.mp4" autoplay loop muted playsinline></video>
-        <div class="body"><h3>Heart — intercalated disc, curvature</h3><div class="meta">Rapid cryo · jrc_mus-heart-4</div></div></div>
-      <div class="card"><video src="assets/video/turntable_crop1144_deviation.mp4" autoplay loop muted playsinline></video>
-        <div class="body"><h3>Kidney — tubule base, protrusions</h3><div class="meta">Rapid cryo · jrc_mus-kidney-4</div></div></div>
-    </div>
-  </div>
-</section>
+    <details style="margin-top:16px">
+      <summary style="cursor:pointer;color:var(--accent)">Rendered stills gallery</summary>
+      <div class="grid three" style="margin-top:18px">
+        <div class="card"><img class="still" src="assets/img/gal_crop1026_curvature_A.jpg" loading="lazy" alt=""><div class="body"><div class="meta">Kidney glomerular — curvature · chemical</div></div></div>
+        <div class="card"><img class="still" src="assets/img/gal_crop1026_curvature_B.jpg" loading="lazy" alt=""><div class="body"><div class="meta">Kidney glomerular — reverse face</div></div></div>
+        <div class="card"><img class="still" src="assets/img/gal_crop1033_curvature_A.jpg" loading="lazy" alt=""><div class="body"><div class="meta">Cortex nerve fibers — curvature · 4 nm</div></div></div>
+        <div class="card"><img class="still" src="assets/img/gal_crop1039_curvature_A.jpg" loading="lazy" alt=""><div class="body"><div class="meta">Liver bile canaliculus — curvature · chemical</div></div></div>
+        <div class="card"><img class="still" src="assets/img/gal_crop1074_deviation_A.jpg" loading="lazy" alt=""><div class="body"><div class="meta">Liver bile canaliculus — protrusions · cryo</div></div></div>
+        <div class="card"><img class="still" src="assets/img/gal_crop1074_deviation_B.jpg" loading="lazy" alt=""><div class="body"><div class="meta">Liver bile canaliculus — reverse face</div></div></div>
+        <div class="card"><img class="still" src="assets/img/gal_crop1134_curvature_A.jpg" loading="lazy" alt=""><div class="body"><div class="meta">Kidney glomerular — curvature · cryo</div></div></div>
+        <div class="card"><img class="still" src="assets/img/gal_crop1142_curvature_A.jpg" loading="lazy" alt=""><div class="body"><div class="meta">Cortex nerve fibers — curvature · cryo</div></div></div>
+        <div class="card"><img class="still" src="assets/img/gal_crop1142_curvature_B.jpg" loading="lazy" alt=""><div class="body"><div class="meta">Cortex nerve fibers — reverse face</div></div></div>
+        <div class="card"><img class="still" src="assets/img/gal_crop1148_curvature_A.jpg" loading="lazy" alt=""><div class="body"><div class="meta">Heart intercalated disc — curvature · chemical</div></div></div>
+        <div class="card"><img class="still" src="assets/img/gal_crop1148_curvature_B.jpg" loading="lazy" alt=""><div class="body"><div class="meta">Heart intercalated disc — reverse face</div></div></div>
+        <div class="card"><img class="still" src="assets/img/gal_crop1152_gap_A.jpg" loading="lazy" alt=""><div class="body"><div class="meta">Heart intercalated disc — contact gap · cryo</div></div></div>
+      </div>
+    </details>
 
-<section id="gallery">
-  <div class="wrap">
-    <h2>Gallery</h2>
-    <p class="lead">Rendered stills of additional membrane patches, both faces of each surface.</p>
-    <div class="grid three">
-      <div class="card"><img class="still" src="assets/img/gal_crop1026_curvature_A.jpg" loading="lazy" alt="">
-        <div class="body"><h3>Kidney glomerular — curvature</h3><div class="meta">Chemical · jrc_mus-kidney</div></div></div>
-      <div class="card"><img class="still" src="assets/img/gal_crop1026_curvature_B.jpg" loading="lazy" alt="">
-        <div class="body"><h3>Kidney glomerular — reverse face</h3><div class="meta">Chemical · jrc_mus-kidney</div></div></div>
-      <div class="card"><img class="still" src="assets/img/gal_crop1033_curvature_A.jpg" loading="lazy" alt="">
-        <div class="body"><h3>Cortex nerve fibers — curvature</h3><div class="meta">Chemical · jrc_mus-cortex-3 · 4 nm</div></div></div>
-      <div class="card"><img class="still" src="assets/img/gal_crop1039_curvature_A.jpg" loading="lazy" alt="">
-        <div class="body"><h3>Liver bile canaliculus — curvature</h3><div class="meta">Chemical · jrc_mus-liver</div></div></div>
-      <div class="card"><img class="still" src="assets/img/gal_crop1074_deviation_A.jpg" loading="lazy" alt="">
-        <div class="body"><h3>Liver bile canaliculus — protrusions</h3><div class="meta">Rapid cryo · jrc_mus-liver-8</div></div></div>
-      <div class="card"><img class="still" src="assets/img/gal_crop1074_deviation_B.jpg" loading="lazy" alt="">
-        <div class="body"><h3>Liver bile canaliculus — reverse face</h3><div class="meta">Rapid cryo · jrc_mus-liver-8</div></div></div>
-      <div class="card"><img class="still" src="assets/img/gal_crop1134_curvature_A.jpg" loading="lazy" alt="">
-        <div class="body"><h3>Kidney glomerular — curvature</h3><div class="meta">Rapid cryo · jrc_mus-kidney-4</div></div></div>
-      <div class="card"><img class="still" src="assets/img/gal_crop1142_curvature_A.jpg" loading="lazy" alt="">
-        <div class="body"><h3>Cortex nerve fibers — curvature</h3><div class="meta">Rapid cryo · jrc_mus-cortex-4</div></div></div>
-      <div class="card"><img class="still" src="assets/img/gal_crop1142_curvature_B.jpg" loading="lazy" alt="">
-        <div class="body"><h3>Cortex nerve fibers — reverse face</h3><div class="meta">Rapid cryo · jrc_mus-cortex-4</div></div></div>
-      <div class="card"><img class="still" src="assets/img/gal_crop1148_curvature_A.jpg" loading="lazy" alt="">
-        <div class="body"><h3>Heart intercalated disc — curvature</h3><div class="meta">Chemical · jrc_mus-heart-6</div></div></div>
-      <div class="card"><img class="still" src="assets/img/gal_crop1148_curvature_B.jpg" loading="lazy" alt="">
-        <div class="body"><h3>Heart intercalated disc — reverse face</h3><div class="meta">Chemical · jrc_mus-heart-6</div></div></div>
-      <div class="card"><img class="still" src="assets/img/gal_crop1152_gap_A.jpg" loading="lazy" alt="">
-        <div class="body"><h3>Heart intercalated disc — contact gap</h3><div class="meta">Rapid cryo · jrc_mus-heart-4</div></div></div>
-    </div>
-  </div>
-</section>
-
-<section id="scale">
-  <div class="wrap">
-    <h2>A sense of scale</h2>
-    <p class="lead">Each patch above spans roughly 1–7 micrometres — a red blood cell is about 8 µm wide,
-    so most of these surfaces would fit inside one. The imaging resolves detail down to 4–8 nm voxels,
-    about the thickness of the cell membrane itself. That span — from whole-tissue context down to the
-    lipid bilayer — is what makes this kind of volume EM data special.</p>
-    <table>
-      <thead><tr><th>Patch</th><th>Tissue · region</th><th>Preservation</th><th>Dataset</th><th>Voxel</th><th>Extent (µm)</th></tr></thead>
-      <tbody>
-        <tr><td>crop1072</td><td>Liver · bile canaliculus</td><td>Rapid cryo</td><td>jrc_mus-liver-8</td><td>8 nm</td><td>2.3 × 1.2 × 2.3</td></tr>
-        <tr><td>crop1039</td><td>Liver · bile canaliculus</td><td>Chemical</td><td>jrc_mus-liver</td><td>8 nm</td><td>1.5 × 1.0 × 1.5</td></tr>
-        <tr><td>crop1074</td><td>Liver · bile canaliculus</td><td>Rapid cryo</td><td>jrc_mus-liver-8</td><td>8 nm</td><td>2.3 × 1.2 × 2.3</td></tr>
-        <tr><td>crop1026 / 1027</td><td>Kidney · glomerular interstitium</td><td>Chemical</td><td>jrc_mus-kidney</td><td>8 nm</td><td>≈ 1.1 × 2.2 × 2.3</td></tr>
-        <tr><td>crop1134</td><td>Kidney · glomerular interstitium</td><td>Rapid cryo</td><td>jrc_mus-kidney-4</td><td>8 nm</td><td>2.7 × 2.3 × 1.5</td></tr>
-        <tr><td>crop1144</td><td>Kidney · distal tubule base</td><td>Rapid cryo</td><td>jrc_mus-kidney-4</td><td>8 nm</td><td>2.3 × 7.1 × 1.5</td></tr>
-        <tr><td>crop1148</td><td>Heart · intercalated disc</td><td>Chemical</td><td>jrc_mus-heart-6</td><td>8 nm</td><td>3.1 × 0.7 × 3.1</td></tr>
-        <tr><td>crop1151 / 1152</td><td>Heart · intercalated disc</td><td>Rapid cryo</td><td>jrc_mus-heart-4</td><td>8 nm</td><td>up to 3.9 × 0.7 × 2.3</td></tr>
-        <tr><td>crop1033</td><td>Cortex · unmyelinated nerve fibers</td><td>Chemical</td><td>jrc_mus-cortex-3</td><td>4 nm</td><td>0.9 × 0.9 × 0.8</td></tr>
-        <tr><td>crop1142</td><td>Cortex · unmyelinated nerve fibers</td><td>Rapid cryo</td><td>jrc_mus-cortex-4</td><td>8 nm</td><td>0.7 × 1.3 × 3.1</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<section id="data">
-  <div class="wrap">
-    <h2>Explore the source data</h2>
-    <p class="lead">All underlying volumes are public on OpenOrganelle (Janelia CellMap). The links open the
-    full datasets — browsable in the browser via Neuroglancer, no install needed.</p>
-    <div class="datasets">
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-liver" target="_blank" rel="noopener">jrc_mus-liver</a></h3><div class="meta">Mouse liver · chemical fixation · FIB-SEM 8 nm</div></div>
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-liver-8" target="_blank" rel="noopener">jrc_mus-liver-8</a></h3><div class="meta">Mouse liver · rapid cryo (HPF) · FIB-SEM 8 nm</div></div>
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-kidney" target="_blank" rel="noopener">jrc_mus-kidney</a></h3><div class="meta">Mouse kidney · chemical fixation · FIB-SEM 8 nm</div></div>
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-kidney-4" target="_blank" rel="noopener">jrc_mus-kidney-4</a></h3><div class="meta">Mouse kidney · rapid cryo (HPF) · FIB-SEM 8 nm</div></div>
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-heart-6" target="_blank" rel="noopener">jrc_mus-heart-6</a></h3><div class="meta">Mouse heart · chemical fixation · FIB-SEM 8 nm</div></div>
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-heart-4" target="_blank" rel="noopener">jrc_mus-heart-4</a></h3><div class="meta">Mouse heart · rapid cryo (HPF) · FIB-SEM 8 nm</div></div>
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-cortex-3" target="_blank" rel="noopener">jrc_mus-cortex-3</a></h3><div class="meta">Mouse cortex · chemical fixation · FIB-SEM 4 nm</div></div>
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-cortex-4" target="_blank" rel="noopener">jrc_mus-cortex-4</a></h3><div class="meta">Mouse cortex · rapid cryo (HPF) · FIB-SEM 8 nm</div></div>
-    </div>
-    <div class="note">The membrane analyses shown here (curvature, contact gaps, protrusions) are from an
-    unpublished manuscript in preparation with the Janelia CellMap team — please don't redistribute the
-    rendered surfaces outside this group for now. The raw datasets themselves are fully public.</div>
+    <div class="note">The membrane analyses shown here (curvature, contact gaps, protrusions, and the
+    charts above) are from an unpublished manuscript in preparation with the Janelia CellMap team —
+    please don't redistribute outside this group for now. The raw datasets themselves are fully public.</div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
     Prepared by Aubrey Weigel · SciLifeLab / KTH — Alpha Cell.
-    Meshes generated from CellMap ground-truth segmentations; rendered and packaged with the pipeline in
+    Meshes from CellMap ground-truth segmentations; rendered and packaged with
     <code>pipeline/render_meshes.py</code>. Viewer: <a href="https://modelviewer.dev" target="_blank" rel="noopener">&lt;model-viewer&gt;</a> (vendored, works offline).
   </div>
 </footer>
 
+<script id="data" type="application/json">{"width":[{"crop":"crop1123","region":"Hepatocyte lateral","prep":"Rapid HPF","p10":8.0,"p50":11.3,"p90":35.8},{"crop":"crop1125","region":"Hepatocyte lateral","prep":"Rapid HPF","p10":8.0,"p50":8.0,"p90":32.0},{"crop":"crop1147","region":"Intercalated disc","prep":"Chemical","p10":8.0,"p50":29.9,"p90":68.4},{"crop":"crop1145","region":"Cardiac interstitial","prep":"Chemical","p10":8.0,"p50":37.5,"p90":157.6},{"crop":"crop1127","region":"Hepatocyte lateral","prep":"Rapid HPF","p10":8.0,"p50":11.3,"p90":32.0},{"crop":"crop1146","region":"Cardiac interstitial","prep":"Chemical","p10":8.0,"p50":29.9,"p90":99.0},{"crop":"crop1072","region":"Bile canaliculus","prep":"Rapid HPF","p10":8.0,"p50":24.0,"p90":58.8},{"crop":"crop1124","region":"Hepatocyte lateral","prep":"Rapid HPF","p10":8.0,"p50":8.0,"p90":17.9},{"crop":"crop1126","region":"Hepatocyte lateral","prep":"Rapid HPF","p10":8.0,"p50":11.3,"p90":40.0},{"crop":"crop1137","region":"Tubule basal","prep":"Rapid HPF","p10":8.0,"p50":11.3,"p90":29.9},{"crop":"crop1075","region":"Bile canaliculus","prep":"Rapid HPF","p10":8.0,"p50":16.0,"p90":37.5},{"crop":"crop1074","region":"Bile canaliculus","prep":"Rapid HPF","p10":8.0,"p50":33.9,"p90":108.8},{"crop":"crop1073","region":"Bile canaliculus","prep":"Rapid HPF","p10":8.0,"p50":39.2,"p90":144.0},{"crop":"crop1134","region":"Glomerular","prep":"Rapid HPF","p10":11.3,"p50":51.2,"p90":131.2},{"crop":"crop1136","region":"Tubule basal","prep":"Rapid HPF","p10":8.0,"p50":11.3,"p90":27.7},{"crop":"crop1071","region":"Hepatocyte lateral","prep":"Rapid HPF","p10":8.0,"p50":25.3,"p90":95.0},{"crop":"crop1144","region":"Tubule basal","prep":"Rapid HPF","p10":8.0,"p50":13.9,"p90":26.5},{"crop":"crop1039","region":"Bile canaliculus","prep":"Chemical","p10":4.0,"p50":36.0,"p90":148.4},{"crop":"crop1042","region":"Bile canaliculus","prep":"Chemical","p10":5.7,"p50":18.3,"p90":73.1},{"crop":"crop1032","region":"Tubule basal","prep":"Chemical","p10":5.7,"p50":41.4,"p90":107.7},{"crop":"crop1030","region":"Tubule basal","prep":"Chemical","p10":4.0,"p50":23.7,"p90":58.2},{"crop":"crop1044","region":"Hepatocyte lateral","prep":"Chemical","p10":8.0,"p50":35.3,"p90":99.0},{"crop":"crop1040","region":"Bile canaliculus","prep":"Chemical","p10":4.0,"p50":32.5,"p90":107.9},{"crop":"crop1027","region":"Glomerular","prep":"Chemical","p10":8.0,"p50":39.4,"p90":109.3},{"crop":"crop1135","region":"Glomerular","prep":"Rapid HPF","p10":8.0,"p50":34.9,"p90":96.3},{"crop":"crop1148","region":"Intercalated disc","prep":"Chemical","p10":8.0,"p50":16.0,"p90":29.9},{"crop":"crop1026","region":"Glomerular","prep":"Chemical","p10":6.9,"p50":32.5,"p90":88.9},{"crop":"crop1149","region":"Cardiac interstitial","prep":"Rapid HPF","p10":8.0,"p50":29.9,"p90":72.0},{"crop":"crop1150","region":"Cardiac interstitial","prep":"Rapid HPF","p10":8.0,"p50":40.8,"p90":151.8},{"crop":"crop1151","region":"Intercalated disc","prep":"Rapid HPF","p10":8.0,"p50":8.0,"p90":16.0},{"crop":"crop1152","region":"Intercalated disc","prep":"Rapid HPF","p10":8.0,"p50":43.1,"p90":94.3},{"crop":"crop1118","region":"Hepatocyte lateral","prep":"Chemical","p10":8.0,"p50":16.0,"p90":75.5},{"crop":"crop1119","region":"Hepatocyte lateral","prep":"Chemical","p10":8.0,"p50":17.9,"p90":68.8},{"crop":"crop1120","region":"Hepatocyte lateral","prep":"Chemical","p10":8.0,"p50":11.3,"p90":33.0},{"crop":"crop1121","region":"Hepatocyte lateral","prep":"Chemical","p10":8.0,"p50":8.0,"p90":13.9},{"crop":"crop1122","region":"Hepatocyte lateral","prep":"Chemical","p10":8.0,"p50":16.0,"p90":53.1}],"contact":[{"crop":"crop1123","region":"Hepatocyte lateral","prep":"Rapid HPF","p40":0.681},{"crop":"crop1125","region":"Hepatocyte lateral","prep":"Rapid HPF","p40":0.86},{"crop":"crop1147","region":"Intercalated disc","prep":"Chemical","p40":0.485},{"crop":"crop1145","region":"Cardiac interstitial","prep":"Chemical","p40":0.0},{"crop":"crop1127","region":"Hepatocyte lateral","prep":"Rapid HPF","p40":0.413},{"crop":"crop1146","region":"Cardiac interstitial","prep":"Chemical","p40":0.082},{"crop":"crop1072","region":"Bile canaliculus","prep":"Rapid HPF","p40":0.446},{"crop":"crop1124","region":"Hepatocyte lateral","prep":"Rapid HPF","p40":0.833},{"crop":"crop1126","region":"Hepatocyte lateral","prep":"Rapid HPF","p40":0.863},{"crop":"crop1137","region":"Tubule basal","prep":"Rapid HPF","p40":0.685},{"crop":"crop1075","region":"Bile canaliculus","prep":"Rapid HPF","p40":0.361},{"crop":"crop1074","region":"Bile canaliculus","prep":"Rapid HPF","p40":0.267},{"crop":"crop1073","region":"Bile canaliculus","prep":"Rapid HPF","p40":0.34},{"crop":"crop1134","region":"Glomerular","prep":"Rapid HPF","p40":0.013},{"crop":"crop1136","region":"Tubule basal","prep":"Rapid HPF","p40":0.454},{"crop":"crop1071","region":"Hepatocyte lateral","prep":"Rapid HPF","p40":0.283},{"crop":"crop1144","region":"Tubule basal","prep":"Rapid HPF","p40":0.208},{"crop":"crop1039","region":"Bile canaliculus","prep":"Chemical","p40":0.532},{"crop":"crop1042","region":"Bile canaliculus","prep":"Chemical","p40":0.282},{"crop":"crop1032","region":"Tubule basal","prep":"Chemical","p40":0.608},{"crop":"crop1030","region":"Tubule basal","prep":"Chemical","p40":0.661},{"crop":"crop1044","region":"Hepatocyte lateral","prep":"Chemical","p40":0.143},{"crop":"crop1040","region":"Bile canaliculus","prep":"Chemical","p40":0.505},{"crop":"crop1027","region":"Glomerular","prep":"Chemical","p40":0.137},{"crop":"crop1135","region":"Glomerular","prep":"Rapid HPF","p40":0.223},{"crop":"crop1148","region":"Intercalated disc","prep":"Chemical","p40":0.07},{"crop":"crop1026","region":"Glomerular","prep":"Chemical","p40":0.132},{"crop":"crop1149","region":"Cardiac interstitial","prep":"Rapid HPF","p40":0.123},{"crop":"crop1150","region":"Cardiac interstitial","prep":"Rapid HPF","p40":0.157},{"crop":"crop1151","region":"Intercalated disc","prep":"Rapid HPF","p40":0.839},{"crop":"crop1152","region":"Intercalated disc","prep":"Rapid HPF","p40":0.216},{"crop":"crop1118","region":"Hepatocyte lateral","prep":"Chemical","p40":0.924},{"crop":"crop1119","region":"Hepatocyte lateral","prep":"Chemical","p40":0.725},{"crop":"crop1120","region":"Hepatocyte lateral","prep":"Chemical","p40":0.638},{"crop":"crop1121","region":"Hepatocyte lateral","prep":"Chemical","p40":0.967},{"crop":"crop1122","region":"Hepatocyte lateral","prep":"Chemical","p40":0.619}],"matrix":[{"region":"Bile canaliculus","metric":"ECS fraction","delta":1.0,"p":0.057,"n":"3v4"},{"region":"Bile canaliculus","metric":"ECS width p50","delta":0.0,"p":1.0,"n":"3v4"},{"region":"Bile canaliculus","metric":"Voronoi gap p50","delta":-0.67,"p":0.229,"n":"3v4"},{"region":"Bile canaliculus","metric":"Contact <40 nm","delta":0.5,"p":0.4,"n":"3v4"},{"region":"Bile canaliculus","metric":"SA:V","delta":1.0,"p":0.057,"n":"3v4"},{"region":"Bile canaliculus","metric":"Cell density","delta":1.0,"p":0.057,"n":"3v4"},{"region":"Bile canaliculus","metric":"Roughness","delta":0.33,"p":0.629,"n":"3v4"},{"region":"Bile canaliculus","metric":"Curvature std","delta":0.83,"p":0.114,"n":"3v4"},{"region":"Bile canaliculus","metric":"Frac concave","delta":1.0,"p":0.057,"n":"3v4"},{"region":"Bile canaliculus","metric":"Protrusions","delta":1.0,"p":0.057,"n":"3v4"},{"region":"Bile canaliculus","metric":"Indentations","delta":1.0,"p":0.057,"n":"3v4"},{"region":"Hepatocyte lateral","metric":"ECS fraction","delta":0.33,"p":0.394,"n":"6v6"},{"region":"Hepatocyte lateral","metric":"ECS width p50","delta":0.42,"p":0.31,"n":"6v6"},{"region":"Hepatocyte lateral","metric":"Voronoi gap p50","delta":-0.22,"p":0.589,"n":"6v6"},{"region":"Hepatocyte lateral","metric":"Contact <40 nm","delta":0.06,"p":0.937,"n":"6v6"},{"region":"Hepatocyte lateral","metric":"SA:V","delta":0.22,"p":0.589,"n":"6v6"},{"region":"Hepatocyte lateral","metric":"Cell density","delta":0.14,"p":0.818,"n":"6v6"},{"region":"Hepatocyte lateral","metric":"Roughness","delta":0.33,"p":0.394,"n":"6v6"},{"region":"Hepatocyte lateral","metric":"Curvature std","delta":0.44,"p":0.24,"n":"6v6"},{"region":"Hepatocyte lateral","metric":"Frac concave","delta":0.39,"p":0.31,"n":"6v6"},{"region":"Hepatocyte lateral","metric":"Protrusions","delta":0.56,"p":0.132,"n":"6v6"},{"region":"Hepatocyte lateral","metric":"Indentations","delta":0.5,"p":0.18,"n":"6v6"},{"region":"Cardiac interstitial","metric":"ECS fraction","delta":-0.5,"p":0.667,"n":"2v2"},{"region":"Cardiac interstitial","metric":"ECS width p50","delta":-0.25,"p":1.0,"n":"2v2"},{"region":"Cardiac interstitial","metric":"Voronoi gap p50","delta":-1.0,"p":0.333,"n":"2v2"},{"region":"Cardiac interstitial","metric":"Contact <40 nm","delta":-1.0,"p":0.333,"n":"2v2"},{"region":"Cardiac interstitial","metric":"SA:V","delta":-0.5,"p":0.667,"n":"2v2"},{"region":"Cardiac interstitial","metric":"Cell density","delta":-1.0,"p":0.333,"n":"2v2"},{"region":"Cardiac interstitial","metric":"Roughness","delta":0.0,"p":1.0,"n":"2v2"},{"region":"Cardiac interstitial","metric":"Curvature std","delta":1.0,"p":0.333,"n":"2v2"},{"region":"Cardiac interstitial","metric":"Frac concave","delta":1.0,"p":0.333,"n":"2v2"},{"region":"Cardiac interstitial","metric":"Protrusions","delta":-1.0,"p":0.333,"n":"2v2"},{"region":"Cardiac interstitial","metric":"Indentations","delta":1.0,"p":0.333,"n":"2v2"},{"region":"Intercalated disc","metric":"ECS fraction","delta":0.0,"p":1.0,"n":"2v2"},{"region":"Intercalated disc","metric":"ECS width p50","delta":0.0,"p":1.0,"n":"2v2"},{"region":"Intercalated disc","metric":"Voronoi gap p50","delta":0.0,"p":1.0,"n":"2v2"},{"region":"Intercalated disc","metric":"Contact <40 nm","delta":-0.5,"p":0.667,"n":"2v2"},{"region":"Intercalated disc","metric":"SA:V","delta":0.0,"p":1.0,"n":"2v2"},{"region":"Intercalated disc","metric":"Cell density","delta":0.75,"p":0.667,"n":"2v2"},{"region":"Intercalated disc","metric":"Roughness","delta":-0.5,"p":0.667,"n":"2v2"},{"region":"Intercalated disc","metric":"Curvature std","delta":-0.5,"p":0.667,"n":"2v2"},{"region":"Intercalated disc","metric":"Frac concave","delta":0.0,"p":1.0,"n":"2v2"},{"region":"Intercalated disc","metric":"Protrusions","delta":0.5,"p":0.667,"n":"2v2"},{"region":"Intercalated disc","metric":"Indentations","delta":0.5,"p":0.667,"n":"2v2"},{"region":"Glomerular","metric":"ECS fraction","delta":0.0,"p":1.0,"n":"2v2"},{"region":"Glomerular","metric":"ECS width p50","delta":-0.5,"p":0.667,"n":"2v2"},{"region":"Glomerular","metric":"Voronoi gap p50","delta":0.0,"p":1.0,"n":"2v2"},{"region":"Glomerular","metric":"Contact <40 nm","delta":0.0,"p":1.0,"n":"2v2"},{"region":"Glomerular","metric":"SA:V","delta":-0.5,"p":0.667,"n":"2v2"},{"region":"Glomerular","metric":"Cell density","delta":0.5,"p":0.667,"n":"2v2"},{"region":"Glomerular","metric":"Roughness","delta":-1.0,"p":0.333,"n":"2v2"},{"region":"Glomerular","metric":"Curvature std","delta":-1.0,"p":0.333,"n":"2v2"},{"region":"Glomerular","metric":"Frac concave","delta":1.0,"p":0.333,"n":"2v2"},{"region":"Glomerular","metric":"Protrusions","delta":1.0,"p":0.333,"n":"2v2"},{"region":"Glomerular","metric":"Indentations","delta":1.0,"p":0.333,"n":"2v2"},{"region":"Tubule basal","metric":"ECS fraction","delta":1.0,"p":0.2,"n":"2v3"},{"region":"Tubule basal","metric":"ECS width p50","delta":1.0,"p":0.2,"n":"2v3"},{"region":"Tubule basal","metric":"Voronoi gap p50","delta":-1.0,"p":0.2,"n":"2v3"},{"region":"Tubule basal","metric":"Contact <40 nm","delta":0.33,"p":0.8,"n":"2v3"},{"region":"Tubule basal","metric":"SA:V","delta":1.0,"p":0.2,"n":"2v3"},{"region":"Tubule basal","metric":"Cell density","delta":0.67,"p":0.4,"n":"2v3"},{"region":"Tubule basal","metric":"Roughness","delta":-1.0,"p":0.2,"n":"2v3"},{"region":"Tubule basal","metric":"Curvature std","delta":-0.33,"p":0.8,"n":"2v3"},{"region":"Tubule basal","metric":"Frac concave","delta":-1.0,"p":0.2,"n":"2v3"},{"region":"Tubule basal","metric":"Protrusions","delta":0.67,"p":0.4,"n":"2v3"},{"region":"Tubule basal","metric":"Indentations","delta":-0.67,"p":0.4,"n":"2v3"}],"regions":["Bile canaliculus","Hepatocyte lateral","Cardiac interstitial","Intercalated disc","Glomerular","Tubule basal"],"tissue":{"Bile canaliculus":"Liver","Hepatocyte lateral":"Liver","Cardiac interstitial":"Heart","Intercalated disc":"Heart","Glomerular":"Kidney","Tubule basal":"Kidney"},"metrics":["ECS fraction","ECS width p50","Voronoi gap p50","Contact <40 nm","SA:V","Cell density","Roughness","Curvature std","Frac concave","Protrusions","Indentations"]}</script>
+<script>
+const D = JSON.parse(document.getElementById('data').textContent);
+const CHEM = getComputedStyle(document.documentElement).getPropertyValue('--chem').trim();
+const CRYO = getComputedStyle(document.documentElement).getPropertyValue('--cryo').trim();
+const tt = document.getElementById('tt');
+function showTT(html, ev){ tt.innerHTML = html; tt.style.opacity = 1;
+  const pad = 14; let x = ev.clientX + pad, y = ev.clientY + pad;
+  if (x + 270 > innerWidth) x = ev.clientX - 270; if (y + 90 > innerHeight) y = ev.clientY - 90;
+  tt.style.left = x + 'px'; tt.style.top = y + 'px'; }
+function hideTT(){ tt.style.opacity = 0; }
+const fmt = n => n < 10 ? n.toFixed(1) : Math.round(n);
+const prepColor = p => p === 'Chemical' ? CHEM : CRYO;
+const prepName = p => p === 'Chemical' ? 'Chemical fixation' : 'Rapid cryo';
+
+function rowChart(el, rows, xmax, xlabel, xticks, valueFns){
+  const W = 940, LEFT = 168, RIGHT = 24, ROW = 20, GROUPGAP = 26, TOP = 8;
+  const regions = D.regions.filter(r => rows.some(d => d.region === r));
+  let y = TOP, bands = [], items = [];
+  let lastTissue = null;
+  for (const reg of regions){
+    const t = D.tissue[reg];
+    if (t !== lastTissue){ y += (lastTissue ? GROUPGAP : 0) + 16; bands.push({label:t, y:y-4, type:'tissue'}); lastTissue = t; }
+    const rs = rows.filter(d => d.region === reg).sort((a,b)=> a.prep === b.prep ? a.crop.localeCompare(b.crop) : (a.prep==='Chemical'?-1:1));
+    bands.push({label:reg, y: y + rs.length*ROW/2, type:'region'});
+    for (const d of rs){ items.push({...d, y: y + ROW/2}); y += ROW; }
+  }
+  const H = y + 36;
+  const X = v => LEFT + (W-LEFT-RIGHT) * Math.min(v,xmax)/xmax;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img">`;
+  for (const t of xticks){
+    s += `<line class="grid-l" x1="${X(t)}" y1="${TOP}" x2="${X(t)}" y2="${H-28}"/>`;
+    s += `<text class="tick" x="${X(t)}" y="${H-14}" text-anchor="middle">${t}</text>`;
+  }
+  s += `<text class="tick" x="${(LEFT+W-RIGHT)/2}" y="${H-1}" text-anchor="middle">${xlabel}</text>`;
+  for (const b of bands){
+    if (b.type==='tissue') s += `<text class="grouplab" x="0" y="${b.y}">${b.label}</text>`;
+    else s += `<text class="rowlab" x="14" y="${b.y+4}">${b.label}</text>`;
+  }
+  for (const d of items){ s += valueFns.marks(d, X, prepColor(d.prep)); }
+  s += `</svg>`;
+  el.innerHTML = s;
+  el.querySelectorAll('[data-tt]').forEach(n => {
+    n.addEventListener('mousemove', ev => showTT(n.dataset.tt, ev));
+    n.addEventListener('mouseleave', hideTT);
+  });
+}
+
+rowChart(document.getElementById('chartWidth'), D.width, 160, 'extracellular width (nm)', [0,25,50,75,100,125,150], {
+  marks(d, X, c){
+    const tip = `<b>${d.crop}</b> · ${prepName(d.prep)}<br>${d.region}<br>median ${fmt(d.p50)} nm · p10 ${fmt(d.p10)} · p90 ${fmt(d.p90)}`;
+    return `<g data-tt="${tip.replace(/"/g,'&quot;')}">`+
+      `<rect x="${X(d.p10)}" y="${d.y-2}" width="${Math.max(X(d.p90)-X(d.p10),2)}" height="4" rx="2" fill="${c}" opacity="0.45"/>`+
+      `<circle cx="${X(d.p50)}" cy="${d.y}" r="4.5" fill="${c}" stroke="#0d1420" stroke-width="1.5"/>`+
+      `<rect x="${X(0)}" y="${d.y-9}" width="${X(160)-X(0)}" height="18" fill="transparent"/></g>`;
+  }
+});
+
+rowChart(document.getElementById('chartContact'), D.contact, 1, 'fraction of membrane within 40 nm of neighbor', [0,0.25,0.5,0.75,1], {
+  marks(d, X, c){
+    const tip = `<b>${d.crop}</b> · ${prepName(d.prep)}<br>${d.region}<br>${(d.p40*100).toFixed(1)}% of boundary &lt; 40 nm`;
+    return `<g data-tt="${tip.replace(/"/g,'&quot;')}">`+
+      `<line x1="${X(0)}" x2="${X(d.p40)}" y1="${d.y}" y2="${d.y}" stroke="${c}" stroke-width="2" opacity="0.35"/>`+
+      `<circle cx="${X(d.p40)}" cy="${d.y}" r="4.5" fill="${c}" stroke="#0d1420" stroke-width="1.5"/>`+
+      `<rect x="${X(0)}" y="${d.y-9}" width="${X(1)-X(0)}" height="18" fill="transparent"/></g>`;
+  }
+});
+
+(function(){
+  const el = document.getElementById('chartMatrix');
+  const regions = D.regions, metrics = D.metrics;
+  const LEFT = 150, TOP = 64, CW = 66, CH = 40, GAP = 2;
+  const W = LEFT + metrics.length*(CW+GAP) + 90, H = TOP + regions.length*(CH+GAP) + 10;
+  function divColor(v){
+    const t = Math.max(-1, Math.min(1, v));
+    const neutral = [42,53,71], red = [230,103,103], blue = [57,135,229];
+    const mix = (a,b,f) => a.map((x,i)=>Math.round(x+(b[i]-x)*f));
+    const c = t >= 0 ? mix(neutral, red, t) : mix(neutral, blue, -t);
+    return `rgb(${c.join(',')})`;
+  }
+  const cell = {};
+  D.matrix.forEach(c => cell[c.region+'|'+c.metric] = c);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img">`;
+  metrics.forEach((m,j)=>{
+    const x = LEFT + j*(CW+GAP) + CW/2;
+    s += `<text class="tick" transform="rotate(-32 ${x} ${TOP-10})" x="${x}" y="${TOP-10}" text-anchor="start">${m}</text>`;
+  });
+  regions.forEach((r,i)=>{
+    const y = TOP + i*(CH+GAP) + CH/2;
+    s += `<text class="rowlab" x="${LEFT-10}" y="${y+4}" text-anchor="end">${r}</text>`;
+    metrics.forEach((m,j)=>{
+      const c = cell[r+'|'+m]; if (!c) return;
+      const x = LEFT + j*(CW+GAP), yy = TOP + i*(CH+GAP);
+      const tip = `<b>${r}</b> · ${m}<br>Cliff's δ = ${c.delta>0?'+':''}${c.delta} (n=${c.n})<br>exact p = ${c.p}` +
+                  `<br>${c.delta>0?'larger under chemical fixation':'larger under rapid cryo'}`;
+      const ink = Math.abs(c.delta) > 0.6 ? '#fff' : '#b9c6da';
+      s += `<g data-tt="${tip.replace(/"/g,'&quot;')}">`+
+        `<rect x="${x}" y="${yy}" width="${CW}" height="${CH}" rx="4" fill="${divColor(c.delta)}"/>`+
+        `<text x="${x+CW/2}" y="${yy+CH/2+4}" text-anchor="middle" font-size="11" fill="${ink}">${c.delta>0?'+':''}${c.delta}</text></g>`;
+    });
+  });
+  const bx = LEFT + metrics.length*(CW+GAP) + 16, by = TOP, bh = regions.length*(CH+GAP) - GAP;
+  for (let k=0;k<40;k++){
+    const v = 1 - 2*k/39;
+    s += `<rect x="${bx}" y="${by + bh*k/40}" width="12" height="${bh/40+0.5}" fill="${divColor(v)}"/>`;
+  }
+  s += `<text class="tick" x="${bx+18}" y="${by+8}">+1 chem</text>`;
+  s += `<text class="tick" x="${bx+18}" y="${by+bh/2+4}">0</text>`;
+  s += `<text class="tick" x="${bx+18}" y="${by+bh}">−1 cryo</text>`;
+  s += `</svg>`;
+  el.innerHTML = s;
+  el.querySelectorAll('[data-tt]').forEach(n => {
+    n.addEventListener('mousemove', ev => showTT(n.dataset.tt, ev));
+    n.addEventListener('mouseleave', hideTT);
+  });
+})();
+</script>
 </body>
 </html>
