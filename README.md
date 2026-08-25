@@ -1,5 +1,7 @@
 # Alpha Cell — data showcase
 
+![Membrane surfaces from FIB-SEM volumes](assets/img/readme_banner.jpg)
+
 A visual showcase of what modern volume electron microscopy data is and what it
 makes possible, built for Alpha Cell presentations and discussions. Everything
 on the page is real segmented data from the Janelia CellMap / OpenOrganelle
@@ -11,6 +13,17 @@ collection — nothing is an illustration.
   movie, charts) is in the repo, so it works offline.
 - **On the web**: enable GitHub Pages (Settings → Pages → Deploy from branch →
   `main`, root) and share the URL.
+
+<table>
+<tr>
+<td width="40%"><img src="assets/img/readme_turntable.gif" alt="Liver bile canaliculus membrane, colored by contact gap"></td>
+<td width="60%"><img src="assets/img/readme_matrix.jpg" alt="Effect-size matrix: chemical vs rapid-cryo preservation across the metric suite"></td>
+</tr>
+<tr>
+<td><sub>Every model is interactive on the page — this one is colored by the local distance to the neighboring cell.</sub></td>
+<td><sub>And every surface is measurable: the full metric suite, region by region, with per-cell statistics on hover.</sub></td>
+</tr>
+</table>
 
 ## The page, in order
 
