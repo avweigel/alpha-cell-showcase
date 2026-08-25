@@ -1,4 +1,4 @@
-# Alpha Cell — membrane landscapes
+# Alpha Cell — data showcase
 
 A visual showcase of what modern volume electron microscopy data is and what it
 makes possible, built for Alpha Cell presentations and discussions. Everything
