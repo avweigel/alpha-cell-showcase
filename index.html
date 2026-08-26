@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Alpha Cell — data showcase</title>
+<title>Alpha Cell &mdash; data showcase</title>
 <script src="vendor/model-viewer-umd.min.js"></script>
 <style>
   :root{
@@ -60,6 +60,39 @@
   footer{padding:34px 0 60px;color:var(--dim);font-size:.85rem}
   .note{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--accent2);
         border-radius:8px;padding:12px 16px;font-size:.88rem;color:var(--dim);margin-top:22px}
+
+  /* ---- redesign additions ---- */
+  .hero{position:relative;border-bottom:1px solid var(--line)}
+  .hero video{width:100%;height:min(78vh,52vw);object-fit:cover;display:block;background:#0a111c}
+  .hero .ov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
+    background:linear-gradient(180deg,rgba(13,20,32,.15) 40%,rgba(13,20,32,.92) 92%);pointer-events:none}
+  .hero .ov .wrap{padding-bottom:38px}
+  .hero h1{font-size:clamp(1.6rem,4vw,2.6rem);margin:0 0 6px;text-shadow:0 2px 14px rgba(0,0,0,.6)}
+  .hero .sub{font-size:1.02rem;max-width:720px;text-shadow:0 1px 8px rgba(0,0,0,.7)}
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(13,20,32,.92);backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);font-size:.86rem}
+  .topbar .wrap{display:flex;align-items:center;gap:18px;padding-top:10px;padding-bottom:10px;flex-wrap:wrap}
+  .topbar .brand{font-weight:650;color:var(--text);white-space:nowrap}
+  .topbar nav{display:flex;gap:14px;flex-wrap:wrap}
+  .topbar nav a{color:var(--dim)}
+  .topbar nav a:hover{color:var(--accent);text-decoration:none}
+  .vtoggle{margin-left:auto;display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+  .vtoggle button{background:none;border:0;color:var(--dim);font:inherit;font-size:.8rem;
+    padding:5px 14px;cursor:pointer}
+  .vtoggle button.on{background:var(--accent);color:#08121f;font-weight:600}
+  details.dig{margin-top:26px;border:1px solid var(--line);border-radius:12px;background:var(--panel2)}
+  details.dig>summary{cursor:pointer;list-style:none;padding:13px 18px;color:var(--accent);
+    font-size:.9rem;font-weight:600;user-select:none}
+  details.dig>summary::-webkit-details-marker{display:none}
+  details.dig>summary::before{content:"\25B8  "}
+  details.dig[open]>summary::before{content:"\25BE  "}
+  details.dig>.inner{padding:6px 18px 20px}
+  .badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.72rem;font-weight:600;
+    letter-spacing:.06em;text-transform:uppercase;vertical-align:2px;margin-left:8px}
+  .badge.new{background:#12351f;color:#6fdf94;border:1px solid #1f5a34}
+  .badge.classic{background:#2a2340;color:#b9a1f0;border:1px solid #45386b}
+  .centerpiece model-viewer{height:560px}
+
 </style>
 </head>
 <body>
@@ -91,46 +124,367 @@ if (location.protocol === 'file:') {
 </script>
 <div id="tt" class="tt"></div>
 
-<header>
-  <div class="wrap">
-    <h1>Alpha Cell — data showcase</h1>
-    <p class="sub">Cell membranes reconstructed from isotropic FIB-SEM volumes of mouse tissue,
-    from the Janelia CellMap / OpenOrganelle collection. Everything on this page is real segmented
-    data, not an illustration — and every surface can be measured, not just admired. Three things
-    to take away: the <b>size</b> of these datasets, the <b>resolution</b> they hold, and the
-    <b>quantification</b> they make possible.</p>
-  </div>
-</header>
+<!-- ================= HERO ================= -->
+<div class="hero">
+  <video src="assets/video/hero_organelles.mp4" poster="assets/img/poster_hero_organelles.jpg" autoplay loop muted playsinline></video>
+  <div class="ov"><div class="wrap">
+    <h1>Every membrane. Every organelle. Mapped.</h1>
+    <p class="sub">This is not an illustration &mdash; it is real data. A corner of one cell, imaged in 3D at a
+    few nanometers, with every structure identified: mitochondria, ER, Golgi, vesicles, microtubules.
+    This page is a tour of what that kind of data looks like, and what Alpha Cell will build with it.</p>
+  </div></div>
+</div>
 
-<!-- ================= OPENER MOVIE ================= -->
-<section id="opener">
+<div class="topbar">
   <div class="wrap">
+    <span class="brand">Alpha Cell &mdash; data showcase</span>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#cell">A whole cell</a>
+      <a href="#tissue">Whole tissues</a>
+      <a href="#measure">The numbers</a>
+      <a href="#limits">Limits</a>
+      <a href="#more">Explore</a>
+    </nav>
+    <div class="vtoggle">
+      <button id="modeHL" class="on">High level</button>
+      <button id="modeFD">Full detail</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= HOW ================= -->
+<section id="how">
+  <div class="wrap">
+    <p class="kicker">How it works</p>
+    <h2>From gray to understanding &mdash; in one movie</h2>
+    <p class="lead">A focused ion beam shaves the sample away a few nanometers at a time while an electron
+    microscope photographs each freshly exposed face; machine learning then gives every voxel a name.
+    Watch raw electron microscopy become labeled, 3D, measurable structure.</p>
     <div class="card">
+      <video src="assets/video/em_to_labels.mp4" poster="assets/img/poster_em_to_labels.jpg" controls preload="metadata" style="max-height:640px;margin:0 auto"></video>
+      <div class="body"><div class="meta">Raw FIB-SEM data with the machine-learning
+      segmentation overlaid: every color is an organelle class, identified automatically for
+      every voxel in the volume.</div></div>
+    </div>
+
+    <details class="dig"><summary>Dig deeper &mdash; the pipeline, step by step</summary><div class="inner">
+      <p class="lead" style="margin-top:10px">Tissue is preserved (chemically or by rapid freezing),
+      imaged by FIB-SEM at 4&ndash;8 nm voxels, densely annotated by experts to create ground truth, and
+      segmented by models trained on that ground truth. The same pipeline, end to end:</p>
+      <div class="gfx">
+      <svg viewBox="0 0 1000 310" role="img" aria-label="Workflow from tissue to quantification">
+      <defs>
+        <marker id="warr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto">
+          <path d="M0 0 L8 4 L0 8 z" fill="#5eb1ff"/>
+        </marker>
+      </defs>
+      <g font-size="13" font-weight="600" fill="#dce6f5" text-anchor="middle">
+        <text x="100" y="34">1 · Tissue</text><text x="300" y="34">2 · Preserve</text>
+        <text x="500" y="34">3 · FIB-SEM</text><text x="700" y="34">4 · Segment</text>
+        <text x="900" y="34">5 · Measure</text>
+      </g>
+      <g fill="#0f1826" stroke="#1f2d42">
+        <rect x="30" y="48" width="140" height="180" rx="10"/><rect x="230" y="48" width="140" height="180" rx="10"/>
+        <rect x="430" y="48" width="140" height="180" rx="10"/><rect x="630" y="48" width="140" height="180" rx="10"/>
+        <rect x="830" y="48" width="140" height="180" rx="10"/>
+      </g>
+      <g stroke="#5eb1ff" stroke-width="2" marker-end="url(#warr)">
+        <line x1="174" y1="138" x2="224" y2="138"/><line x1="374" y1="138" x2="424" y2="138"/>
+        <line x1="574" y1="138" x2="624" y2="138"/><line x1="774" y1="138" x2="824" y2="138"/>
+      </g>
+      <g>
+        <path d="M70 108 q-14 -20 8 -26 q6 -14 22 -8 q18 -8 22 8 q20 8 6 26 q4 22 -20 20 q-8 10 -18 2 q-22 4 -20 -22 z"
+              fill="#22344e" stroke="#5eb1ff" stroke-width="1.4"/>
+        <text x="100" y="168" fill="#8fa2bd" font-size="11" text-anchor="middle">mouse liver · kidney</text>
+        <text x="100" y="184" fill="#8fa2bd" font-size="11" text-anchor="middle">heart · cortex</text>
+      </g>
+      <g font-size="11" text-anchor="middle">
+        <rect x="248" y="70" width="104" height="52" rx="8" fill="#16263c" stroke="#3987e5" stroke-width="1.3"/>
+        <text x="300" y="92" fill="#dce6f5" font-weight="600">chemical</text>
+        <text x="300" y="108" fill="#8fa2bd">aldehyde fixation</text>
+        <rect x="248" y="140" width="104" height="52" rx="8" fill="#16263c" stroke="#d95926" stroke-width="1.3"/>
+        <text x="300" y="162" fill="#dce6f5" font-weight="600">rapid cryo</text>
+        <text x="300" y="178" fill="#8fa2bd">high-pressure frozen</text>
+        <text x="300" y="214" fill="#6b7d99" font-size="10.5">same tissues, both routes</text>
+      </g>
+      <g>
+        <path d="M455 78 l40 34" stroke="#ffb35e" stroke-width="2"/>
+        <path d="M545 78 l-40 34" stroke="#8fd0ff" stroke-width="2"/>
+        <text x="462" y="72" fill="#ffb35e" font-size="10.5">ion beam</text>
+        <text x="516" y="72" fill="#8fd0ff" font-size="10.5">e⁻ beam</text>
+        <path d="M470 112 l30 -12 l26 10 l0 34 l-30 12 l-26 -10 z" fill="#1b2c44" stroke="#5eb1ff" stroke-width="1.4"/>
+        <path d="M470 112 l30 -12 l26 10 l-30 12 z" fill="#2a4266" stroke="#5eb1ff" stroke-width="1"/>
+        <g stroke="#33455f" stroke-width="1"><line x1="474" y1="124" x2="522" y2="124"/><line x1="474" y1="132" x2="522" y2="132"/><line x1="474" y1="140" x2="522" y2="140"/></g>
+        <text x="500" y="178" fill="#8fa2bd" font-size="11" text-anchor="middle">image · mill 4–8 nm</text>
+        <text x="500" y="194" fill="#8fa2bd" font-size="11" text-anchor="middle">repeat ×10,000s</text>
+      </g>
+      <g>
+        <rect x="648" y="80" width="46" height="46" rx="4" fill="#25303f"/>
+        <circle cx="662" cy="96" r="7" fill="#3a4a5e"/><circle cx="680" cy="112" r="9" fill="#31404f"/>
+        <path d="M700 103 l14 0" stroke="#5eb1ff" stroke-width="2" marker-end="url(#warr)"/>
+        <rect x="708" y="80" width="46" height="46" rx="4" fill="#1b2c44"/>
+        <circle cx="722" cy="96" r="7" fill="#3987e5"/><circle cx="740" cy="112" r="9" fill="#d95926"/>
+        <path d="M708 80 h46 v14 q-24 10 -46 0 z" fill="#199e70" opacity="0.7"/>
+        <text x="671" y="140" fill="#6b7d99" font-size="10" text-anchor="middle">raw EM</text>
+        <text x="731" y="140" fill="#6b7d99" font-size="10" text-anchor="middle">labels</text>
+        <text x="700" y="162" fill="#8fa2bd" font-size="11" text-anchor="middle">every voxel labeled:</text>
+        <text x="700" y="178" fill="#8fa2bd" font-size="11" text-anchor="middle">cell · extracellular space</text>
+        <text x="700" y="194" fill="#8fa2bd" font-size="11" text-anchor="middle">organelles</text>
+      </g>
+      <g>
+        <path d="M848 96 q14 -18 34 -8 q20 -12 32 4 q12 14 -6 24 q-2 16 -20 12 q-16 8 -26 -4 q-18 -2 -14 -28 z"
+              fill="none" stroke="#e66767" stroke-width="1.6"/>
+        <g stroke="#3987e5" stroke-width="2">
+          <line x1="856" y1="176" x2="856" y2="152"/><line x1="872" y1="176" x2="872" y2="142"/>
+          <line x1="888" y1="176" x2="888" y2="160"/><line x1="904" y1="176" x2="904" y2="134"/>
+          <line x1="920" y1="176" x2="920" y2="148"/>
+        </g>
+        <line x1="848" y1="176" x2="952" y2="176" stroke="#33455f" stroke-width="1.5"/>
+        <text x="900" y="200" fill="#8fa2bd" font-size="11" text-anchor="middle">curvature · gaps · contacts</text>
+        <text x="900" y="216" fill="#8fa2bd" font-size="11" text-anchor="middle">topology · statistics</text>
+      </g>
+      <text x="500" y="278" fill="#8fa2bd" font-size="12.5" text-anchor="middle">two preservation routes, one identical pipeline — differences are the preparation, not the processing</text>
+    </svg>
+      </div>
+      <p class="meta" style="margin-top:14px">The ground-truth annotations and trained models behind
+      pages like this are public &mdash; see the
+      <a href="https://cellmapchallenge.janelia.org" target="_blank" rel="noopener">CellMap Segmentation
+      Challenge</a>, where the community competes on exactly this task.</p>
+    </div></details>
+  </div>
+</section>
+
+<!-- ================= A WHOLE CELL ================= -->
+<section id="cell">
+  <div class="wrap">
+    <p class="kicker">A whole cell</p>
+    <h2>One cell, everything in it <span class="badge new">built from public data</span></h2>
+    <p class="lead">Not a crop, not a cartoon: an entire human cell (HeLa) with its nucleus, ER,
+    mitochondria, Golgi, lysosomes, endosomes, lipid droplets and nuclear pores &mdash; reconstructed from
+    the public segmentations. <b>Drag to spin it, scroll to zoom in.</b></p>
+
+    <div class="card centerpiece">
+      <model-viewer src="assets/glb/hela_wholecell.glb" poster="assets/img/poster_wholecell.jpg"
+        camera-controls auto-rotate auto-rotate-delay="1200" exposure="0.9" tone-mapping="neutral"
+        camera-orbit="-25deg 55deg 105%" min-camera-orbit="auto auto 5%"
+        interaction-prompt="none"></model-viewer>
+      <div class="hint">drag &middot; scroll &middot; pan</div>
+      <div class="body">
+        <h3>jrc_hela-2, whole-cell reconstruction</h3>
+        <div class="meta">Built from the open COSEM segmentations on OpenOrganelle &mdash; the same dataset
+        anyone can download. The plasma membrane is drawn translucent so you can see inside.</div>
+      </div>
+    </div>
+    <p class="legend">
+      <span class="chip" style="background:#2f5fc4"></span>nucleus
+      <span class="chip" style="background:#1f9440"></span>mitochondria
+      <span class="chip" style="background:#d9a613"></span>ER
+      <span class="chip" style="background:#bb3ec7"></span>Golgi
+      <span class="chip" style="background:#e0641f"></span>lysosome
+      <span class="chip" style="background:#6a3fd4"></span>endosome
+      <span class="chip" style="background:#d4568f"></span>vesicle
+      <span class="chip" style="background:#0da8a2"></span>peroxisome
+      <span class="chip" style="background:#c22f43"></span>microtubule
+      <span class="chip" style="background:#7fd0ff"></span>nuclear pore
+    </p>
+
+    <div class="grid two" style="margin-top:22px">
+      <div class="card">
+        <video src="assets/video/hepatocyte_wholecell.mp4" poster="assets/img/poster_hepatocyte_wholecell.jpg" autoplay loop muted playsinline></video>
+        <div class="body">
+          <h3>A whole liver cell, organelle by organelle</h3>
+          <div class="meta">One hepatocyte &mdash; twelve thousand cubic micrometres &mdash; with lipid droplets,
+          mitochondria, peroxisomes and nuclei mapped throughout.</div>
+        </div>
+      </div>
+      <div class="card">
+        <video src="assets/video/golgi_flythrough.mp4" poster="assets/img/poster_golgi_flythrough.jpg" autoplay loop muted playsinline></video>
+        <div class="body">
+          <h3>The Golgi, stack by stack <span class="badge classic">a classic</span></h3>
+          <div class="meta">The cell's shipping department, reconstructed cisterna by cisterna with its
+          cloud of vesicles &mdash; one of the renders that made this kind of data famous (COSEM, 2021).</div>
+        </div>
+      </div>
+    </div>
+
+    <details class="dig"><summary>Dig deeper &mdash; grab a scene and look around inside</summary><div class="inner">
+      <p class="lead" style="margin-top:10px">Four interactive neighborhoods cut from the ground-truth
+      volumes at 2&ndash;4 nm voxels. Every one is live 3D &mdash; drag, zoom, find the nuclear pores.</p>
+      <div class="grid two" style="margin-top:14px">
+      <div class="card">
+        <model-viewer src="assets/glb/liver_cell_organelles.glb" poster="assets/img/poster_liver_cell.jpg"
+          camera-controls auto-rotate auto-rotate-delay="1500" exposure="0.85" tone-mapping="neutral"
+          interaction-prompt="none"></model-viewer>
+        <div class="hint">drag · scroll · pan</div>
+        <div class="body">
+          <h3>A hepatocyte neighborhood</h3>
+          <div class="meta">Nucleus, mitochondria, ER, peroxisomes, endosomes and vesicles in one
+          region of a liver cell — jrc_mus-liver ground truth (crop145), 4 nm voxels.</div>
+          <span class="scale">≈ 1.4 × 3.0 × 3.0 µm</span>
+        </div>
+      </div>
+      <div class="card">
+        <model-viewer src="assets/glb/liver_organelles_golgi.glb" poster="assets/img/poster_golgi.jpg"
+          camera-controls auto-rotate auto-rotate-delay="1500" exposure="0.85" tone-mapping="neutral"
+          interaction-prompt="none" loading="lazy"></model-viewer>
+        <div class="hint">drag · scroll · pan</div>
+        <div class="body">
+          <h3>The secretory pathway, up close</h3>
+          <div class="meta">A Golgi stack with ER, endosomes and a crowd of vesicles around the
+          nucleus — jrc_mus-liver ground truth (crop143), 4 nm voxels.</div>
+          <span class="scale">≈ 0.8 × 0.8 × 0.8 µm</span>
+        </div>
+      </div>
+      <div class="card">
+        <model-viewer src="assets/glb/macrophage_organelles.glb" poster="assets/img/poster_macrophage.jpg"
+          camera-controls auto-rotate auto-rotate-delay="1500" exposure="0.85" tone-mapping="neutral"
+          interaction-prompt="none" loading="lazy"></model-viewer>
+        <div class="hint">drag · scroll · pan</div>
+        <div class="body">
+          <h3>A human immune cell, annotated</h3>
+          <div class="meta">Macrophage (jrc_macrophage-2, CellMap Segmentation Challenge training data,
+          2 nm voxels): find the nuclear pores studding the envelope, the ER sheets, a microtubule,
+          lysosomes and endosomes.</div>
+          <span class="scale">≈ 2.0 × 1.0 × 2.0 µm</span>
+        </div>
+      </div>
+      <div class="card">
+        <model-viewer src="assets/glb/hela_organelles.glb" poster="assets/img/poster_hela.jpg"
+          camera-controls auto-rotate auto-rotate-delay="1500" exposure="0.85" tone-mapping="neutral"
+          interaction-prompt="none" loading="lazy"></model-viewer>
+        <div class="hint">drag · scroll · pan</div>
+        <div class="body">
+          <h3>HeLa, around the nucleus</h3>
+          <div class="meta">Human HeLa cell (jrc_hela-2, challenge training data): nucleus with pores,
+          mitochondria, ER network, endosomes and microtubules in one 2 nm-voxel scene.</div>
+          <span class="scale">≈ 1.6 × 1.6 × 2.1 µm</span>
+        </div>
+      </div>
+    </div>
+    </div></details>
+  </div>
+</section>
+
+<!-- ================= WHOLE TISSUES ================= -->
+<section id="tissue">
+  <div class="wrap">
+    <p class="kicker">Whole tissues</p>
+    <h2>Then zoom out &mdash; without losing the detail</h2>
+    <p class="lead">The same imaging scales from one cell to entire pieces of organ: thousands of
+    cells in their native context, each one still sharp down to its membranes. That span &mdash; six
+    orders of magnitude in a single dataset &mdash; is what no other microscopy offers.</p>
+
+    <div class="grid two">
+      <div class="card">
+        <video src="assets/video/tissue_block.mp4" poster="assets/img/poster_tissue_block.jpg" autoplay loop muted playsinline></video>
+        <div class="body">
+          <h3>A block of tissue, every cell segmented</h3>
+          <div class="meta">Intact tissue with every cell boundary (green) and nucleus (pink) mapped &mdash;
+          the tissue-scale starting point for everything below.</div>
+        </div>
+      </div>
+      <div class="card">
+        <video src="assets/video/liver_cube.mp4" poster="assets/img/poster_liver_cube.jpg" autoplay loop muted playsinline></video>
+        <div class="body">
+          <h3>Inside mouse liver</h3>
+          <div class="meta">A cube of liver tissue: plasma membranes, nuclei and organelles unpacked
+          layer by layer from one FIB-SEM volume.</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 style="margin-top:48px">An entire liver acinus</h2>
+    <p class="lead">Twelve million cubic micrometres from central vein to portal vein, with every cell
+    and every organelle segmented &mdash; so how cells change across the liver's metabolic gradient becomes
+    a question you can answer cell by cell.</p>
+    <div class="card" style="margin-bottom:20px">
+      <video src="assets/video/zonation_acinus.mp4" poster="assets/img/zonation_acinus.jpg"
+             controls preload="none" style="aspect-ratio:16/9"></video>
+      <div class="body">
+        <h3>One acinus, every cell, every organelle</h3>
+        <div class="meta">From the whole acinus (cells colored central → portal) down to a single
+        hepatocyte's nuclei and mitochondria — one continuous FIB-SEM dataset. With the Feliciano Lab
+        (Janelia); analysis at github.com/janelia-cellmap/metabolic-liver-zonation.</div>
+      </div>
+    </div>
+
+    <div class="grid three">
+      <div class="card"><img class="still" src="assets/img/zonation_rawem.jpg" loading="lazy" alt="Raw EM strip across the acinus">
+        <div class="body"><div class="meta">The raw EM underneath — one continuous strip across the acinus.</div></div></div>
+      <div class="card"><img class="still" src="assets/img/zonation_hepatocyte.jpg" loading="lazy" alt="Single hepatocyte with segmented canaliculi">
+        <div class="body"><div class="meta">A single hepatocyte: canaliculi, sinusoid contacts and organelles segmented.</div></div></div>
+      <div class="card"><img class="still" src="assets/img/zonation_canaliculi.jpg" loading="lazy" alt="Canaliculus mesh with skeleton path">
+        <div class="body"><div class="meta">Canaliculus surface with its skeleton — path length and radius quantified along the network.</div></div></div>
+    </div>
+
+    <h2 style="margin-top:48px">Structures counted across whole tissues</h2>
+    <p class="lead">Once a structure can be recognized automatically, it can be counted everywhere &mdash;
+    turning &ldquo;does this vary across the tissue?&rdquo; into a lookup. Nuclear pores in liver
+    <span class="badge new">2026, in preparation</span>, plasmodesmata in plants, and the biggest
+    mitochondria you have ever seen.</p>
+    <div class="grid two">
+      <div class="card">
+        <video src="assets/video/nuclearpores_density.mp4" autoplay loop muted playsinline></video>
+        <div class="body">
+          <h3>Nuclear pores, counted across a tissue</h3>
+          <div class="meta">What you see: each nucleus rendered from the EM data, and every bright dot on
+          it is one nuclear pore, the channel that controls traffic in and out of the nucleus. Pores are
+          stereotyped enough that a model finds all of them automatically across a whole tissue volume. In
+          this liver-zonation dataset, counting them per nucleus shows transport capacity following the
+          central→portal metabolic gradient.</div>
+        </div>
+      </div>
+      <div class="card">
+        <video src="assets/video/plasmodesmata.mp4" autoplay loop muted playsinline></video>
+        <div class="body">
+          <h3>Plasmodesmata — same idea, different kingdom</h3>
+          <div class="meta">The channels connecting plant cells, volume-rendered from FIB-SEM of leaf
+          tissue. Mapping their density across healthy vs gall-infected leaves turns a plant-development
+          question into a counting problem.</div>
+        </div>
+      </div>
+      <div class="card"><img class="still" src="assets/img/np_densities.jpg" loading="lazy" alt="Nuclei colored by nuclear pore density across the acinus">
+        <div class="body"><div class="meta">The readout: every nucleus in the volume, colored by its pore count, laid out along the acinus from central vein to portal vein. Color = how many pores each nucleus has.</div></div></div>
+      <div class="card"><img class="still" src="assets/img/pd_gall.jpg" loading="lazy" alt="Plasmodesmata density map across plant tissue">
+        <div class="body"><div class="meta">Plasmodesmata density mapped across a whole leaf section — gall-infected tissue, with healthy tissue as the comparison.</div></div></div>
+    </div>
+
+    <div class="grid two" style="margin-top:20px">
+      <div class="card">
+        <video src="assets/video/nucleus_pores_render.mp4" poster="assets/img/poster_nucleus_pores_render.jpg" autoplay loop muted playsinline></video>
+        <div class="body">
+          <h3>Every dot is a nuclear pore</h3>
+          <div class="meta">One nucleus rendered from the EM with each pore found automatically. Scaled
+          up: 16.8 million pores across 26,104 nuclei in 16 datasets &mdash; the largest survey of nuclear
+          pore organization assembled to date (manuscript in preparation, 2026).</div>
+        </div>
+      </div>
+      <div class="card">
+        <video src="assets/video/celegans_mito.mp4" poster="assets/img/poster_celegans_mito.jpg" autoplay loop muted playsinline></video>
+        <div class="body">
+          <h3>The largest mitochondria on record</h3>
+          <div class="meta">In the <i>C. elegans</i> intestine, single mitochondria grow into
+          skeletal networks spanning much of a cell &mdash; invisible to any method that cannot see whole
+          cells at organelle resolution.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px">
       <video src="assets/video/stylet_flythrough.mp4" poster="assets/img/stylet_poster.jpg"
              controls preload="none" style="aspect-ratio:16/9"></video>
       <div class="body">
         <h3>Two minutes through one dataset</h3>
-        <div class="meta">A mosquito stylet, imaged end to end with FIB-SEM: the fly-through starts in
-        the raw electron microscopy (scale bar 1 µm) and ends in the full 3D reconstruction with every
-        cell segmented (scale bar 10 µm). One continuous volume, from organ scale down to membranes —
-        Janelia CellMap, manuscript in preparation.</div>
+        <div class="meta">A mosquito stylet &mdash; the needle it bites with &mdash; imaged end to end: the
+        fly-through starts in raw EM and ends with every cell of the organ reconstructed in 3D.
+        Manuscript in preparation.</div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ================= 1. SCALE ================= -->
-<section id="scale">
-  <div class="wrap">
-    <p class="kicker">1 · Scale</p>
-    <h2>Whole tissue, without losing the detail</h2>
-    <p class="lead">A single FIB-SEM dataset here spans tens to hundreds of micrometres of intact
-    tissue — thousands of cells in their native context — yet stays sharp down to the width of a
-    single membrane. That span, six orders of magnitude in one dataset, is what makes this data
-    different from either light microscopy (big but blurry) or classical EM (sharp but tiny).</p>
-
-    <div class="gfx">
-    <svg viewBox="0 0 1000 330" role="img" aria-label="Scale journey from tissue to lipid bilayer">
+    <details class="dig"><summary>Dig deeper &mdash; the scale ladder, and where to fly through the data yourself</summary><div class="inner">
+      <div class="gfx" style="margin-top:10px">
+      <svg viewBox="0 0 1000 330" role="img" aria-label="Scale journey from tissue to lipid bilayer">
       <defs>
         <marker id="sarr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto">
           <path d="M0 0 L8 4 L0 8 z" fill="#5eb1ff"/>
@@ -221,11 +575,10 @@ if (location.protocol === 'file:') {
       </g>
       <text x="500" y="322" fill="#5eb1ff" font-size="13" font-weight="600" text-anchor="middle">one dataset spans this whole line — six orders of magnitude, no gaps</text>
     </svg>
-    </div>
-
-    <p class="lead" style="margin-top:26px">The full volumes are public and browsable in the browser —
-    open any dataset below in Neuroglancer and fly through the tissue yourself. No install, no login.</p>
-    <div class="datasets">
+      </div>
+      <p class="lead" style="margin-top:26px">The full volumes are public and browsable in the browser &mdash;
+      open any dataset below in Neuroglancer and fly through the tissue yourself. No install, no login.</p>
+      <div class="datasets">
       <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-liver" target="_blank" rel="noopener">jrc_mus-liver</a></h3><div class="meta">Mouse liver &middot; FIB-SEM 8 nm</div></div>
       <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-kidney" target="_blank" rel="noopener">jrc_mus-kidney</a></h3><div class="meta">Mouse kidney &middot; FIB-SEM 8 nm</div></div>
       <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-cortex-3" target="_blank" rel="noopener">jrc_mus-cortex-3</a></h3><div class="meta">Mouse cortex &middot; FIB-SEM 4 nm</div></div>
@@ -235,192 +588,61 @@ if (location.protocol === 'file:') {
     </div>
     <p class="meta" style="margin-top:14px">The rapid-cryo companion datasets used in the membrane comparison
     (jrc_mus-liver-8, jrc_mus-kidney-4, jrc_mus-heart-4/-6, jrc_mus-cortex-4) are part of a manuscript in
-    preparation and not yet public.</p></div>
+    preparation and not yet public.</p>
+    </div></details>
   </div>
 </section>
 
-<!-- ================= 2. RESOLUTION ================= -->
-<section id="resolution">
+<!-- ================= MEASURE ================= -->
+<section id="measure">
   <div class="wrap">
-    <p class="kicker">2 · Resolution</p>
-    <h2>Down to the membrane itself</h2>
-    <p class="lead">The voxels are 4–8 nm on a side — the scale of the lipid bilayer. At that
-    resolution the surface of a cell stops being a smooth cartoon: every fold, protrusion and
-    contact is real geometry. These are live 3D models — <b>drag to rotate, scroll to zoom</b>.
-    Zoom all the way in: the detail keeps going.</p>
-
-    <div class="grid two">
+    <p class="kicker">Not just pictures</p>
+    <h2>Every surface is a measurement</h2>
+    <p class="lead">Because every voxel is labeled, the geometry is data: how wide the space between
+    two cells is, how curved or folded a membrane is, how much of it touches its neighbor. On these
+    two models the color <i>is</i> the measurement &mdash; drag them around.</p>
+    <div class="grid two" style="margin-bottom:26px">
       <div class="card">
-        <model-viewer src="assets/glb/crop1033_curvature.glb" poster="assets/img/gal_crop1033_curvature_A.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none"></model-viewer>
+        <model-viewer src="assets/glb/crop1072_gap.glb" poster="assets/img/crop1072_gap_sideA.jpg"
+          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
         <div class="hint">drag · scroll · pan</div>
         <div class="body">
-          <h3>Cortex — unmyelinated nerve fibers</h3>
-          <div class="meta">The finest data here: 4 nm voxels (jrc_mus-cortex-3, chemical fixation).
-          The whole patch is smaller than a single mitochondrion is long.</div>
-          <span class="scale">≈ 0.9 × 0.9 × 0.8 µm</span>
-        </div>
-      </div>
-      <div class="card">
-        <model-viewer src="assets/glb/crop1072_curvature.glb" poster="assets/img/crop1072_curvature_sideA.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none"></model-viewer>
-        <div class="hint">drag · scroll · pan</div>
-        <div class="body">
-          <h3>Liver — bile canaliculus</h3>
-          <div class="meta">Rapid cryo (high-pressure frozen), jrc_mus-liver-8, 8 nm voxels. Color is
-          mean curvature: red convex, blue concave — measured at every point on the surface.</div>
+          <h3>A measurement you can touch</h3>
+          <div class="meta">Liver bile canaliculus, colored by the local distance to the neighboring
+          cell — contact sites and open channels read directly off the surface.</div>
           <span class="scale">≈ 2.3 × 1.2 × 2.3 µm</span>
         </div>
       </div>
-    </div>
-
-    <p class="legend" style="margin-top:18px">
-      <b>Color legends for the models on this page</b> —
-      <b>Curvature</b><span class="chip" style="background:#b2182b"></span>convex
-      <span class="chip" style="background:#2166ac"></span>concave &nbsp;·&nbsp;
-      <b>Contact gap</b>: distance to the neighboring cell &nbsp;·&nbsp;
-      <b>Deviation</b>: protrusions and indentations vs the smoothed surface
-    </p>
-  </div>
-</section>
-
-<!-- ================= ORGANELLES ================= -->
-<section id="organelles">
-  <div class="wrap">
-    <p class="kicker">Inside the cell</p>
-    <h2>Every organelle, not just the boundary</h2>
-    <p class="lead">The segmentations don't stop at the cell surface. In the ground-truth volumes every
-    voxel has an identity — nucleus, mitochondria, ER, Golgi, endosomes, lysosomes, peroxisomes,
-    vesicles. These two scenes are cut from the mouse liver dataset at 4 nm voxels; <b>drag them
-    around and zoom in</b>.</p>
-
-    <p class="legend">
-      <span class="chip" style="background:#2f5fc4"></span>nucleus
-      <span class="chip" style="background:#1f9440"></span>mitochondria
-      <span class="chip" style="background:#d9a613"></span>ER
-      <span class="chip" style="background:#bb3ec7"></span>Golgi
-      <span class="chip" style="background:#e0641f"></span>lysosome
-      <span class="chip" style="background:#6a3fd4"></span>endosome
-      <span class="chip" style="background:#d4568f"></span>vesicle
-      <span class="chip" style="background:#0da8a2"></span>peroxisome
-      <span class="chip" style="background:#c22f43"></span>microtubule
-      <span class="chip" style="background:#7fd0ff"></span>nuclear pore
-    </p>
-
-    <div class="grid two" style="margin-top:14px">
       <div class="card">
-        <model-viewer src="assets/glb/liver_cell_organelles.glb" poster="assets/img/poster_liver_cell.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="0.85" tone-mapping="neutral"
-          interaction-prompt="none"></model-viewer>
+        <model-viewer src="assets/glb/crop1144_deviation.glb" poster="assets/img/crop1144_deviation_sideA.jpg"
+          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
         <div class="hint">drag · scroll · pan</div>
         <div class="body">
-          <h3>A hepatocyte neighborhood</h3>
-          <div class="meta">Nucleus, mitochondria, ER, peroxisomes, endosomes and vesicles in one
-          region of a liver cell — jrc_mus-liver ground truth (crop145), 4 nm voxels.</div>
-          <span class="scale">≈ 1.4 × 3.0 × 3.0 µm</span>
-        </div>
-      </div>
-      <div class="card">
-        <model-viewer src="assets/glb/liver_organelles_golgi.glb" poster="assets/img/poster_golgi.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="0.85" tone-mapping="neutral"
-          interaction-prompt="none" loading="lazy"></model-viewer>
-        <div class="hint">drag · scroll · pan</div>
-        <div class="body">
-          <h3>The secretory pathway, up close</h3>
-          <div class="meta">A Golgi stack with ER, endosomes and a crowd of vesicles around the
-          nucleus — jrc_mus-liver ground truth (crop143), 4 nm voxels.</div>
-          <span class="scale">≈ 0.8 × 0.8 × 0.8 µm</span>
-        </div>
-      </div>
-      <div class="card">
-        <model-viewer src="assets/glb/macrophage_organelles.glb" poster="assets/img/poster_macrophage.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="0.85" tone-mapping="neutral"
-          interaction-prompt="none" loading="lazy"></model-viewer>
-        <div class="hint">drag · scroll · pan</div>
-        <div class="body">
-          <h3>A human immune cell, annotated</h3>
-          <div class="meta">Macrophage (jrc_macrophage-2, CellMap Segmentation Challenge training data,
-          2 nm voxels): find the nuclear pores studding the envelope, the ER sheets, a microtubule,
-          lysosomes and endosomes.</div>
-          <span class="scale">≈ 2.0 × 1.0 × 2.0 µm</span>
-        </div>
-      </div>
-      <div class="card">
-        <model-viewer src="assets/glb/hela_organelles.glb" poster="assets/img/poster_hela.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="0.85" tone-mapping="neutral"
-          interaction-prompt="none" loading="lazy"></model-viewer>
-        <div class="hint">drag · scroll · pan</div>
-        <div class="body">
-          <h3>HeLa, around the nucleus</h3>
-          <div class="meta">Human HeLa cell (jrc_hela-2, challenge training data): nucleus with pores,
-          mitochondria, ER network, endosomes and microtubules in one 2 nm-voxel scene.</div>
-          <span class="scale">≈ 1.6 × 1.6 × 2.1 µm</span>
+          <h3>Membrane topology, mapped</h3>
+          <div class="meta">Kidney tubule base, colored by deviation from the smoothed surface —
+          every protrusion and indentation detected and countable.</div>
+          <span class="scale">≈ 2.3 × 7.1 × 1.5 µm</span>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ================= VIGNETTE: LIVER ZONATION ================= -->
-<section id="zonation">
-  <div class="wrap">
-    <p class="kicker">What this enables</p>
-    <h2>Biology at tissue scale: liver zonation</h2>
-    <p class="lead">Put the three ingredients together — scale, resolution, quantification — and you can
-    ask questions neither microscopy tradition could touch. Here: an entire liver acinus, 12 million
-    cubic micrometres from central vein to portal vein, with every cell segmented. Zoom into any one
-    hepatocyte and every organelle is there too — so how organelles change across the metabolic
-    gradient of the lobule becomes a measurable question, cell by cell.</p>
-
-    <div class="card" style="margin-bottom:20px">
-      <video src="assets/video/zonation_acinus.mp4" poster="assets/img/zonation_acinus.jpg"
-             controls preload="none" style="aspect-ratio:16/9"></video>
-      <div class="body">
-        <h3>One acinus, every cell, every organelle</h3>
-        <div class="meta">From the whole acinus (cells colored central → portal) down to a single
-        hepatocyte's nuclei and mitochondria — one continuous FIB-SEM dataset. With the Feliciano Lab
-        (Janelia); analysis at github.com/janelia-cellmap/metabolic-liver-zonation.</div>
-      </div>
+    
+    <details class="dig"><summary>Dig deeper &mdash; the numbers behind the surfaces</summary><div class="inner" style="padding-top:14px">
+    <div class="chart-card">
+      <h3>Six measurements, one dataset</h3>
+      <p class="csub">A sampler of what falls out of the segmentations — each dot is one imaged tissue volume, grouped by tissue. Hover any dot.</p>
+      <div class="legend"><span><span class="sw" style="background:var(--chem)"></span>Chemical fixation</span>
+      <span><span class="sw" style="background:var(--cryo)"></span>Rapid cryo (high-pressure frozen)</span></div>
+      <div class="grid three" id="miniGrid" style="gap:14px;margin-top:10px"></div>
     </div>
 
-    <div class="grid three">
-      <div class="card"><img class="still" src="assets/img/zonation_rawem.jpg" loading="lazy" alt="Raw EM strip across the acinus">
-        <div class="body"><div class="meta">The raw EM underneath — one continuous strip across the acinus.</div></div></div>
-      <div class="card"><img class="still" src="assets/img/zonation_hepatocyte.jpg" loading="lazy" alt="Single hepatocyte with segmented canaliculi">
-        <div class="body"><div class="meta">A single hepatocyte: canaliculi, sinusoid contacts and organelles segmented.</div></div></div>
-      <div class="card"><img class="still" src="assets/img/zonation_canaliculi.jpg" loading="lazy" alt="Canaliculus mesh with skeleton path">
-        <div class="body"><div class="meta">Canaliculus surface with its skeleton — path length and radius quantified along the network.</div></div></div>
+    <div class="chart-card">
+      <h3>Every metric, every region</h3>
+      <p class="csub">Effect size (Cliff's δ) for chemical vs rapid-cryo preservation across the metric suite.
+      Red = larger under chemical fixation, blue = larger under cryo. Hover any cell.</p>
+      <div id="chartMatrix"></div>
     </div>
-
-    <h2 style="margin-top:48px">…and it generalizes</h2>
-    <p class="lead">The same pipeline reads out other structures and other organisms. Two examples.</p>
-
-    <div class="grid two">
-      <div class="card">
-        <video src="assets/video/nuclearpores_density.mp4" autoplay loop muted playsinline></video>
-        <div class="body">
-          <h3>Nuclear pores, counted across a tissue</h3>
-          <div class="meta">What you see: each nucleus rendered from the EM data, and every bright dot on
-          it is one nuclear pore, the channel that controls traffic in and out of the nucleus. Pores are
-          stereotyped enough that a model finds all of them automatically across a whole tissue volume. In
-          this liver-zonation dataset, counting them per nucleus shows transport capacity following the
-          central→portal metabolic gradient.</div>
-        </div>
-      </div>
-      <div class="card">
-        <video src="assets/video/plasmodesmata.mp4" autoplay loop muted playsinline></video>
-        <div class="body">
-          <h3>Plasmodesmata — same idea, different kingdom</h3>
-          <div class="meta">The channels connecting plant cells, volume-rendered from FIB-SEM of leaf
-          tissue. Mapping their density across healthy vs gall-infected leaves turns a plant-development
-          question into a counting problem.</div>
-        </div>
-      </div>
-      <div class="card"><img class="still" src="assets/img/np_densities.jpg" loading="lazy" alt="Nuclei colored by nuclear pore density across the acinus">
-        <div class="body"><div class="meta">The readout: every nucleus in the volume, colored by its pore count, laid out along the acinus from central vein to portal vein. Color = how many pores each nucleus has.</div></div></div>
-      <div class="card"><img class="still" src="assets/img/pd_gall.jpg" loading="lazy" alt="Plasmodesmata density map across plant tissue">
-        <div class="body"><div class="meta">Plasmodesmata density mapped across a whole leaf section — gall-infected tissue, with healthy tissue as the comparison.</div></div></div>
-    </div>
+    </div></details>
   </div>
 </section>
 
@@ -428,9 +650,9 @@ if (location.protocol === 'file:') {
 <section id="limits">
   <div class="wrap">
     <p class="kicker">The honest slide</p>
-    <h2>What FIB-SEM cannot capture</h2>
+    <h2>What this data cannot capture</h2>
     <p class="lead">Volume EM shows every membrane and organelle, but it is blind in specific,
-    well-understood ways — and each blind spot is exactly where another part of Alpha Cell comes in.</p>
+    well-understood ways &mdash; and each blind spot is exactly where another part of Alpha Cell comes in.</p>
     <div class="grid two">
       <div class="card"><div class="body">
         <h3>No molecular identity</h3>
@@ -465,150 +687,17 @@ if (location.protocol === 'file:') {
   </div>
 </section>
 
-<!-- ================= WORKFLOW ================= -->
-<section id="workflow">
-  <div class="wrap">
-    <p class="kicker">How it's made</p>
-    <h2>From organ to numbers</h2>
-    <p class="lead">The same tissues go down two preservation routes and through one identical
-    pipeline — so any difference we measure is the preparation, not the processing.</p>
-    <div class="gfx">
-    <svg viewBox="0 0 1000 310" role="img" aria-label="Workflow from tissue to quantification">
-      <defs>
-        <marker id="warr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto">
-          <path d="M0 0 L8 4 L0 8 z" fill="#5eb1ff"/>
-        </marker>
-      </defs>
-      <g font-size="13" font-weight="600" fill="#dce6f5" text-anchor="middle">
-        <text x="100" y="34">1 · Tissue</text><text x="300" y="34">2 · Preserve</text>
-        <text x="500" y="34">3 · FIB-SEM</text><text x="700" y="34">4 · Segment</text>
-        <text x="900" y="34">5 · Measure</text>
-      </g>
-      <g fill="#0f1826" stroke="#1f2d42">
-        <rect x="30" y="48" width="140" height="180" rx="10"/><rect x="230" y="48" width="140" height="180" rx="10"/>
-        <rect x="430" y="48" width="140" height="180" rx="10"/><rect x="630" y="48" width="140" height="180" rx="10"/>
-        <rect x="830" y="48" width="140" height="180" rx="10"/>
-      </g>
-      <g stroke="#5eb1ff" stroke-width="2" marker-end="url(#warr)">
-        <line x1="174" y1="138" x2="224" y2="138"/><line x1="374" y1="138" x2="424" y2="138"/>
-        <line x1="574" y1="138" x2="624" y2="138"/><line x1="774" y1="138" x2="824" y2="138"/>
-      </g>
-      <g>
-        <path d="M70 108 q-14 -20 8 -26 q6 -14 22 -8 q18 -8 22 8 q20 8 6 26 q4 22 -20 20 q-8 10 -18 2 q-22 4 -20 -22 z"
-              fill="#22344e" stroke="#5eb1ff" stroke-width="1.4"/>
-        <text x="100" y="168" fill="#8fa2bd" font-size="11" text-anchor="middle">mouse liver · kidney</text>
-        <text x="100" y="184" fill="#8fa2bd" font-size="11" text-anchor="middle">heart · cortex</text>
-      </g>
-      <g font-size="11" text-anchor="middle">
-        <rect x="248" y="70" width="104" height="52" rx="8" fill="#16263c" stroke="#3987e5" stroke-width="1.3"/>
-        <text x="300" y="92" fill="#dce6f5" font-weight="600">chemical</text>
-        <text x="300" y="108" fill="#8fa2bd">aldehyde fixation</text>
-        <rect x="248" y="140" width="104" height="52" rx="8" fill="#16263c" stroke="#d95926" stroke-width="1.3"/>
-        <text x="300" y="162" fill="#dce6f5" font-weight="600">rapid cryo</text>
-        <text x="300" y="178" fill="#8fa2bd">high-pressure frozen</text>
-        <text x="300" y="214" fill="#6b7d99" font-size="10.5">same tissues, both routes</text>
-      </g>
-      <g>
-        <path d="M455 78 l40 34" stroke="#ffb35e" stroke-width="2"/>
-        <path d="M545 78 l-40 34" stroke="#8fd0ff" stroke-width="2"/>
-        <text x="462" y="72" fill="#ffb35e" font-size="10.5">ion beam</text>
-        <text x="516" y="72" fill="#8fd0ff" font-size="10.5">e⁻ beam</text>
-        <path d="M470 112 l30 -12 l26 10 l0 34 l-30 12 l-26 -10 z" fill="#1b2c44" stroke="#5eb1ff" stroke-width="1.4"/>
-        <path d="M470 112 l30 -12 l26 10 l-30 12 z" fill="#2a4266" stroke="#5eb1ff" stroke-width="1"/>
-        <g stroke="#33455f" stroke-width="1"><line x1="474" y1="124" x2="522" y2="124"/><line x1="474" y1="132" x2="522" y2="132"/><line x1="474" y1="140" x2="522" y2="140"/></g>
-        <text x="500" y="178" fill="#8fa2bd" font-size="11" text-anchor="middle">image · mill 4–8 nm</text>
-        <text x="500" y="194" fill="#8fa2bd" font-size="11" text-anchor="middle">repeat ×10,000s</text>
-      </g>
-      <g>
-        <rect x="648" y="80" width="46" height="46" rx="4" fill="#25303f"/>
-        <circle cx="662" cy="96" r="7" fill="#3a4a5e"/><circle cx="680" cy="112" r="9" fill="#31404f"/>
-        <path d="M700 103 l14 0" stroke="#5eb1ff" stroke-width="2" marker-end="url(#warr)"/>
-        <rect x="708" y="80" width="46" height="46" rx="4" fill="#1b2c44"/>
-        <circle cx="722" cy="96" r="7" fill="#3987e5"/><circle cx="740" cy="112" r="9" fill="#d95926"/>
-        <path d="M708 80 h46 v14 q-24 10 -46 0 z" fill="#199e70" opacity="0.7"/>
-        <text x="671" y="140" fill="#6b7d99" font-size="10" text-anchor="middle">raw EM</text>
-        <text x="731" y="140" fill="#6b7d99" font-size="10" text-anchor="middle">labels</text>
-        <text x="700" y="162" fill="#8fa2bd" font-size="11" text-anchor="middle">every voxel labeled:</text>
-        <text x="700" y="178" fill="#8fa2bd" font-size="11" text-anchor="middle">cell · extracellular space</text>
-        <text x="700" y="194" fill="#8fa2bd" font-size="11" text-anchor="middle">organelles</text>
-      </g>
-      <g>
-        <path d="M848 96 q14 -18 34 -8 q20 -12 32 4 q12 14 -6 24 q-2 16 -20 12 q-16 8 -26 -4 q-18 -2 -14 -28 z"
-              fill="none" stroke="#e66767" stroke-width="1.6"/>
-        <g stroke="#3987e5" stroke-width="2">
-          <line x1="856" y1="176" x2="856" y2="152"/><line x1="872" y1="176" x2="872" y2="142"/>
-          <line x1="888" y1="176" x2="888" y2="160"/><line x1="904" y1="176" x2="904" y2="134"/>
-          <line x1="920" y1="176" x2="920" y2="148"/>
-        </g>
-        <line x1="848" y1="176" x2="952" y2="176" stroke="#33455f" stroke-width="1.5"/>
-        <text x="900" y="200" fill="#8fa2bd" font-size="11" text-anchor="middle">curvature · gaps · contacts</text>
-        <text x="900" y="216" fill="#8fa2bd" font-size="11" text-anchor="middle">topology · statistics</text>
-      </g>
-      <text x="500" y="278" fill="#8fa2bd" font-size="12.5" text-anchor="middle">two preservation routes, one identical pipeline — differences are the preparation, not the processing</text>
-    </svg>
-    </div>
-  </div>
-</section>
-
-<!-- ================= 3. QUANTIFICATION ================= -->
-<section id="quant">
-  <div class="wrap">
-    <p class="kicker">Deep dive</p>
-    <h2>Not just a pretty picture: the numbers</h2>
-    <p class="lead">Because every voxel is labeled, the geometry is measurable: how wide the space
-    between cells is, how much of a membrane sits in contact with its neighbor, how rough or curved
-    or folded a surface is — per point, per cell, per region, per preservation method. The models
-    below aren't colored for looks; the color <i>is</i> the measurement.</p>
-
-    <div class="grid two" style="margin-bottom:26px">
-      <div class="card">
-        <model-viewer src="assets/glb/crop1072_gap.glb" poster="assets/img/crop1072_gap_sideA.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
-        <div class="hint">drag · scroll · pan</div>
-        <div class="body">
-          <h3>A measurement you can touch</h3>
-          <div class="meta">Liver bile canaliculus, colored by the local distance to the neighboring
-          cell — contact sites and open channels read directly off the surface.</div>
-          <span class="scale">≈ 2.3 × 1.2 × 2.3 µm</span>
-        </div>
-      </div>
-      <div class="card">
-        <model-viewer src="assets/glb/crop1144_deviation.glb" poster="assets/img/crop1144_deviation_sideA.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
-        <div class="hint">drag · scroll · pan</div>
-        <div class="body">
-          <h3>Membrane topology, mapped</h3>
-          <div class="meta">Kidney tubule base, colored by deviation from the smoothed surface —
-          every protrusion and indentation detected and countable.</div>
-          <span class="scale">≈ 2.3 × 7.1 × 1.5 µm</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="chart-card">
-      <h3>Six measurements, one dataset</h3>
-      <p class="csub">A sampler of what falls out of the segmentations — each dot is one imaged tissue volume, grouped by tissue. Hover any dot.</p>
-      <div class="legend"><span><span class="sw" style="background:var(--chem)"></span>Chemical fixation</span>
-      <span><span class="sw" style="background:var(--cryo)"></span>Rapid cryo (high-pressure frozen)</span></div>
-      <div class="grid three" id="miniGrid" style="gap:14px;margin-top:10px"></div>
-    </div>
-
-    <div class="chart-card">
-      <h3>Every metric, every region</h3>
-      <p class="csub">Effect size (Cliff's δ) for chemical vs rapid-cryo preservation across the metric suite.
-      Red = larger under chemical fixation, blue = larger under cryo. Hover any cell.</p>
-      <div id="chartMatrix"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= MORE MODELS / MOVIES / GALLERY ================= -->
+<!-- ================= MORE ================= -->
 <section id="more">
   <div class="wrap">
-    <h2>More to explore</h2>
-    <p class="lead">The rest of the membrane library — every one a live 3D model. (Pre-rendered MP4
-    turntable loops for slides live in <code>assets/video/</code> in this repo.)</p>
+    <p class="kicker">Explore</p>
+    <h2>Take the controls yourself</h2>
+    <p class="lead">Everything here is built on open data. Browse the volumes on
+    <a href="https://openorganelle.janelia.org" target="_blank" rel="noopener">OpenOrganelle</a>,
+    try the <a href="https://cellmapchallenge.janelia.org" target="_blank" rel="noopener">CellMap
+    Segmentation Challenge</a>, or dig into the full membrane-model library below.</p>
 
+    <details class="dig"><summary>The membrane library &mdash; 10 more interactive models</summary><div class="inner" style="padding-top:14px">
     <div class="grid two">
       <div class="card"><model-viewer src="assets/glb/crop1027_curvature.glb" poster="assets/img/crop1027_curvature_sideA.jpg" camera-controls auto-rotate exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
         <div class="hint">drag · scroll · pan</div>
@@ -645,14 +734,15 @@ if (location.protocol === 'file:') {
     <div class="note">The membrane analyses shown here (curvature, contact gaps, protrusions, and the
     charts above) are from an unpublished manuscript in preparation with the Janelia CellMap team —
     please don't redistribute outside this group for now. The raw datasets themselves are fully public.</div>
+    </div></details>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    Prepared by Aubrey Weigel · SciLifeLab / KTH — Alpha Cell.
-    Meshes from CellMap ground-truth segmentations; rendered and packaged with
-    <code>pipeline/render_meshes.py</code>. Viewer: <a href="https://modelviewer.dev" target="_blank" rel="noopener">&lt;model-viewer&gt;</a> (vendored, works offline).
+    Prepared by Aubrey Weigel &middot; SciLifeLab / KTH &mdash; Alpha Cell.
+    Meshes from CellMap ground-truth and COSEM segmentations; movies from the CellMap team and
+    collaborators. Viewer: <a href="https://modelviewer.dev" target="_blank" rel="noopener">&lt;model-viewer&gt;</a> (vendored, works offline).
   </div>
 </footer>
 
@@ -760,6 +850,19 @@ const MINIS = JSON.parse(document.getElementById('minidata').textContent);
     n.addEventListener('mouseleave', hideTT);
   });
 })();
+
+// ---- high-level / full-detail toggle ----
+(function(){
+  const b1 = document.getElementById('modeHL'), b2 = document.getElementById('modeFD');
+  function setMode(full){
+    document.querySelectorAll('details.dig').forEach(d => d.open = full);
+    b1.classList.toggle('on', !full); b2.classList.toggle('on', full);
+  }
+  b1.addEventListener('click', () => setMode(false));
+  b2.addEventListener('click', () => setMode(true));
+  setMode(false);
+})();
+
 </script>
 </body>
 </html>
