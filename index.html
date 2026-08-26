@@ -63,6 +63,10 @@
 </style>
 </head>
 <body>
+<div id="fileWarn" style="display:none;background:#3a2a12;border-bottom:1px solid #6b4a1a;color:#ffd9a0;padding:12px 24px;font-size:.9rem;text-align:center">
+The interactive 3D models can't load when this page is opened as a plain file.
+Double-click <b>Open&nbsp;showcase.command</b> in this folder instead (or use the web link) and everything works.</div>
+<script>if (location.protocol === 'file:') document.getElementById('fileWarn').style.display = 'block';</script>
 <div id="tt" class="tt"></div>
 
 <header>
@@ -282,7 +286,7 @@
 
     <div class="grid two" style="margin-top:14px">
       <div class="card">
-        <model-viewer src="assets/glb/liver_cell_organelles.glb"
+        <model-viewer src="assets/glb/liver_cell_organelles.glb" poster="assets/img/poster_liver_cell.jpg"
           camera-controls auto-rotate auto-rotate-delay="1500" exposure="0.85" tone-mapping="neutral"
           interaction-prompt="none"></model-viewer>
         <div class="hint">drag · scroll · pan</div>
@@ -294,7 +298,7 @@
         </div>
       </div>
       <div class="card">
-        <model-viewer src="assets/glb/liver_organelles_golgi.glb"
+        <model-viewer src="assets/glb/liver_organelles_golgi.glb" poster="assets/img/poster_golgi.jpg"
           camera-controls auto-rotate auto-rotate-delay="1500" exposure="0.85" tone-mapping="neutral"
           interaction-prompt="none" loading="lazy"></model-viewer>
         <div class="hint">drag · scroll · pan</div>
@@ -306,7 +310,7 @@
         </div>
       </div>
       <div class="card">
-        <model-viewer src="assets/glb/macrophage_organelles.glb"
+        <model-viewer src="assets/glb/macrophage_organelles.glb" poster="assets/img/poster_macrophage.jpg"
           camera-controls auto-rotate auto-rotate-delay="1500" exposure="0.85" tone-mapping="neutral"
           interaction-prompt="none" loading="lazy"></model-viewer>
         <div class="hint">drag · scroll · pan</div>
@@ -319,7 +323,7 @@
         </div>
       </div>
       <div class="card">
-        <model-viewer src="assets/glb/hela_organelles.glb"
+        <model-viewer src="assets/glb/hela_organelles.glb" poster="assets/img/poster_hela.jpg"
           camera-controls auto-rotate auto-rotate-delay="1500" exposure="0.85" tone-mapping="neutral"
           interaction-prompt="none" loading="lazy"></model-viewer>
         <div class="hint">drag · scroll · pan</div>

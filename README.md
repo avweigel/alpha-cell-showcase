@@ -11,14 +11,14 @@ collection — nothing is an illustration.
 
 **The showcase is a single web page: `index.html`.**
 
+- **On the web (easiest)**: the page is live at the repo's GitHub Pages URL —
+  nothing to download, everything works.
 - **On your computer**: download or clone this repo, then **double-click
-  `index.html`** — it opens in your browser. Everything (3D viewer, meshes,
-  movies, charts) is inside the repo, so it works offline with no install and
-  no server.
-- **On the web**: if GitHub Pages is enabled for this repo, the same page is
-  live at the repo's Pages URL — nothing to download.
-
-That's it. No dependencies, no build step.
+  `Open showcase.command`** — it starts a tiny local server and opens the page
+  with everything working, fully offline. (Opening `index.html` directly also
+  works for the movies, charts and images, but browsers refuse to load the
+  interactive 3D models from a plain file — the page will tell you if that
+  happens.)
 
 ## What's on the page
 
