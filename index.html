@@ -204,15 +204,16 @@ Double-click <b>Open&nbsp;showcase.command</b> in this folder instead (or use th
     <p class="lead" style="margin-top:26px">The full volumes are public and browsable in the browser —
     open any dataset below in Neuroglancer and fly through the tissue yourself. No install, no login.</p>
     <div class="datasets">
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-liver" target="_blank" rel="noopener">jrc_mus-liver</a></h3><div class="meta">Mouse liver · chemical · 8 nm</div></div>
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-liver-8" target="_blank" rel="noopener">jrc_mus-liver-8</a></h3><div class="meta">Mouse liver · rapid cryo · 8 nm</div></div>
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-kidney" target="_blank" rel="noopener">jrc_mus-kidney</a></h3><div class="meta">Mouse kidney · chemical · 8 nm</div></div>
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-kidney-4" target="_blank" rel="noopener">jrc_mus-kidney-4</a></h3><div class="meta">Mouse kidney · rapid cryo · 8 nm</div></div>
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-heart-6" target="_blank" rel="noopener">jrc_mus-heart-6</a></h3><div class="meta">Mouse heart · chemical · 8 nm</div></div>
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-heart-4" target="_blank" rel="noopener">jrc_mus-heart-4</a></h3><div class="meta">Mouse heart · rapid cryo · 8 nm</div></div>
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-cortex-3" target="_blank" rel="noopener">jrc_mus-cortex-3</a></h3><div class="meta">Mouse cortex · chemical · 4 nm</div></div>
-      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-cortex-4" target="_blank" rel="noopener">jrc_mus-cortex-4</a></h3><div class="meta">Mouse cortex · rapid cryo · 8 nm</div></div>
+      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-liver" target="_blank" rel="noopener">jrc_mus-liver</a></h3><div class="meta">Mouse liver &middot; FIB-SEM 8 nm</div></div>
+      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-kidney" target="_blank" rel="noopener">jrc_mus-kidney</a></h3><div class="meta">Mouse kidney &middot; FIB-SEM 8 nm</div></div>
+      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-cortex-3" target="_blank" rel="noopener">jrc_mus-cortex-3</a></h3><div class="meta">Mouse cortex &middot; FIB-SEM 4 nm</div></div>
+      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_mus-liver-zon-1" target="_blank" rel="noopener">jrc_mus-liver-zon-1</a></h3><div class="meta">Mouse liver, zonation &middot; the acinus dataset below</div></div>
+      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_hela-2" target="_blank" rel="noopener">jrc_hela-2</a></h3><div class="meta">Human HeLa cell &middot; FIB-SEM 2&ndash;4 nm</div></div>
+      <div class="ds"><h3><a href="https://openorganelle.janelia.org/datasets/jrc_macrophage-2" target="_blank" rel="noopener">jrc_macrophage-2</a></h3><div class="meta">Human macrophage &middot; FIB-SEM 2&ndash;4 nm</div></div>
     </div>
+    <p class="meta" style="margin-top:14px">The rapid-cryo companion datasets used in the membrane comparison
+    (jrc_mus-liver-8, jrc_mus-kidney-4, jrc_mus-heart-4/-6, jrc_mus-cortex-4) are part of a manuscript in
+    preparation and not yet public.</p></div>
   </div>
 </section>
 
@@ -338,58 +339,6 @@ Double-click <b>Open&nbsp;showcase.command</b> in this folder instead (or use th
   </div>
 </section>
 
-<!-- ================= 3. QUANTIFICATION ================= -->
-<section id="quant">
-  <div class="wrap">
-    <p class="kicker">3 · Quantification</p>
-    <h2>Not just a pretty picture</h2>
-    <p class="lead">Because every voxel is labeled, the geometry is measurable: how wide the space
-    between cells is, how much of a membrane sits in contact with its neighbor, how rough or curved
-    or folded a surface is — per point, per cell, per region, per preservation method. The models
-    below aren't colored for looks; the color <i>is</i> the measurement.</p>
-
-    <div class="grid two" style="margin-bottom:26px">
-      <div class="card">
-        <model-viewer src="assets/glb/crop1072_gap.glb" poster="assets/img/crop1072_gap_sideA.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
-        <div class="hint">drag · scroll · pan</div>
-        <div class="body">
-          <h3>A measurement you can touch</h3>
-          <div class="meta">Liver bile canaliculus, colored by the local distance to the neighboring
-          cell — contact sites and open channels read directly off the surface.</div>
-          <span class="scale">≈ 2.3 × 1.2 × 2.3 µm</span>
-        </div>
-      </div>
-      <div class="card">
-        <model-viewer src="assets/glb/crop1144_deviation.glb" poster="assets/img/crop1144_deviation_sideA.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
-        <div class="hint">drag · scroll · pan</div>
-        <div class="body">
-          <h3>Membrane topology, mapped</h3>
-          <div class="meta">Kidney tubule base, colored by deviation from the smoothed surface —
-          every protrusion and indentation detected and countable.</div>
-          <span class="scale">≈ 2.3 × 7.1 × 1.5 µm</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="chart-card">
-      <h3>Six measurements, one dataset</h3>
-      <p class="csub">A sampler of what falls out of the segmentations — each dot is one imaged tissue volume, grouped by tissue. Hover any dot.</p>
-      <div class="legend"><span><span class="sw" style="background:var(--chem)"></span>Chemical fixation</span>
-      <span><span class="sw" style="background:var(--cryo)"></span>Rapid cryo (high-pressure frozen)</span></div>
-      <div class="grid three" id="miniGrid" style="gap:14px;margin-top:10px"></div>
-    </div>
-
-    <div class="chart-card">
-      <h3>Every metric, every region</h3>
-      <p class="csub">Effect size (Cliff's δ) for chemical vs rapid-cryo preservation across the metric suite.
-      Red = larger under chemical fixation, blue = larger under cryo. Hover any cell.</p>
-      <div id="chartMatrix"></div>
-    </div>
-  </div>
-</section>
-
 <!-- ================= VIGNETTE: LIVER ZONATION ================= -->
 <section id="zonation">
   <div class="wrap">
@@ -429,9 +378,11 @@ Double-click <b>Open&nbsp;showcase.command</b> in this folder instead (or use th
         <video src="assets/video/nuclearpores_density.mp4" autoplay loop muted playsinline></video>
         <div class="body">
           <h3>Nuclear pores, counted across a tissue</h3>
-          <div class="meta">Nuclear pores are stereotyped enough to segment automatically — every pore on
-          every nucleus. In the same liver-zonation volume, pore density per nucleus maps onto the
-          central→portal axis: nuclear transport capacity follows the metabolic gradient.</div>
+          <div class="meta">What you see: each nucleus rendered from the EM data, and every bright dot on
+          it is one nuclear pore, the channel that controls traffic in and out of the nucleus. Pores are
+          stereotyped enough that a model finds all of them automatically across a whole tissue volume. In
+          this liver-zonation dataset, counting them per nucleus shows transport capacity following the
+          central→portal metabolic gradient.</div>
         </div>
       </div>
       <div class="card">
@@ -444,10 +395,51 @@ Double-click <b>Open&nbsp;showcase.command</b> in this folder instead (or use th
         </div>
       </div>
       <div class="card"><img class="still" src="assets/img/np_densities.jpg" loading="lazy" alt="Nuclei colored by nuclear pore density across the acinus">
-        <div class="body"><div class="meta">Every nucleus in the volume, colored by pore count — central vein (oxygen-poor) to portal vein (oxygen-rich).</div></div></div>
+        <div class="body"><div class="meta">The readout: every nucleus in the volume, colored by its pore count, laid out along the acinus from central vein to portal vein. Color = how many pores each nucleus has.</div></div></div>
       <div class="card"><img class="still" src="assets/img/pd_gall.jpg" loading="lazy" alt="Plasmodesmata density map across plant tissue">
         <div class="body"><div class="meta">Plasmodesmata density mapped across a whole leaf section — gall-infected tissue, with healthy tissue as the comparison.</div></div></div>
     </div>
+  </div>
+</section>
+
+<!-- ================= LIMITS ================= -->
+<section id="limits">
+  <div class="wrap">
+    <p class="kicker">The honest slide</p>
+    <h2>What FIB-SEM cannot capture</h2>
+    <p class="lead">Volume EM shows every membrane and organelle, but it is blind in specific,
+    well-understood ways — and each blind spot is exactly where another part of Alpha Cell comes in.</p>
+    <div class="grid two">
+      <div class="card"><div class="body">
+        <h3>No molecular identity</h3>
+        <div class="meta">EM contrast shows structure, not names: a vesicle full of protein X looks like a
+        vesicle full of protein Y. That is what the Human Protein Atlas and multiplexed light microscopy
+        bring — who is where — and why Alpha Cell registers imaging modalities onto the same cells.</div>
+      </div></div>
+      <div class="card"><div class="body">
+        <h3>One frozen moment</h3>
+        <div class="meta">Every volume is a snapshot of a fixed or frozen cell — no motion, no before and
+        after. Dynamics come from live light microscopy, and building the temporal reference is its own
+        phase of the program (Cell Time).</div>
+      </div></div>
+      <div class="card"><div class="body">
+        <h3>Preparation leaves fingerprints</h3>
+        <div class="meta">Chemical fixation subtly reshapes membranes; rapid freezing preserves them
+        better but is harder to scale. This is measurable — the deep-dive section below quantifies
+        exactly how preservation choices change what you see — and it is why acquisition protocols have
+        to be benchmarked, not assumed.</div>
+      </div></div>
+      <div class="card"><div class="body">
+        <h3>Structure below the voxel</h3>
+        <div class="meta">At 4–8 nm you see the membrane, not the molecules in it. Protein-scale
+        structure in a native state is cryo-ET territory — the laser-phase-plate TEM planned for the
+        program — with FIB-SEM providing the cellular context around it.</div>
+      </div></div>
+    </div>
+    <p class="lead" style="margin-top:22px;margin-bottom:0">No single microscope builds a virtual cell.
+    The point of Alpha Cell's Space phase is to combine these views — volume EM for geometry and context,
+    light microscopy for identity and time, cryo-ET for molecular structure — into one registered,
+    model-ready reference.</p>
   </div>
 </section>
 
@@ -532,6 +524,58 @@ Double-click <b>Open&nbsp;showcase.command</b> in this folder instead (or use th
       </g>
       <text x="500" y="278" fill="#8fa2bd" font-size="12.5" text-anchor="middle">two preservation routes, one identical pipeline — differences are the preparation, not the processing</text>
     </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3. QUANTIFICATION ================= -->
+<section id="quant">
+  <div class="wrap">
+    <p class="kicker">Deep dive</p>
+    <h2>Not just a pretty picture: the numbers</h2>
+    <p class="lead">Because every voxel is labeled, the geometry is measurable: how wide the space
+    between cells is, how much of a membrane sits in contact with its neighbor, how rough or curved
+    or folded a surface is — per point, per cell, per region, per preservation method. The models
+    below aren't colored for looks; the color <i>is</i> the measurement.</p>
+
+    <div class="grid two" style="margin-bottom:26px">
+      <div class="card">
+        <model-viewer src="assets/glb/crop1072_gap.glb" poster="assets/img/crop1072_gap_sideA.jpg"
+          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
+        <div class="hint">drag · scroll · pan</div>
+        <div class="body">
+          <h3>A measurement you can touch</h3>
+          <div class="meta">Liver bile canaliculus, colored by the local distance to the neighboring
+          cell — contact sites and open channels read directly off the surface.</div>
+          <span class="scale">≈ 2.3 × 1.2 × 2.3 µm</span>
+        </div>
+      </div>
+      <div class="card">
+        <model-viewer src="assets/glb/crop1144_deviation.glb" poster="assets/img/crop1144_deviation_sideA.jpg"
+          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
+        <div class="hint">drag · scroll · pan</div>
+        <div class="body">
+          <h3>Membrane topology, mapped</h3>
+          <div class="meta">Kidney tubule base, colored by deviation from the smoothed surface —
+          every protrusion and indentation detected and countable.</div>
+          <span class="scale">≈ 2.3 × 7.1 × 1.5 µm</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3>Six measurements, one dataset</h3>
+      <p class="csub">A sampler of what falls out of the segmentations — each dot is one imaged tissue volume, grouped by tissue. Hover any dot.</p>
+      <div class="legend"><span><span class="sw" style="background:var(--chem)"></span>Chemical fixation</span>
+      <span><span class="sw" style="background:var(--cryo)"></span>Rapid cryo (high-pressure frozen)</span></div>
+      <div class="grid three" id="miniGrid" style="gap:14px;margin-top:10px"></div>
+    </div>
+
+    <div class="chart-card">
+      <h3>Every metric, every region</h3>
+      <p class="csub">Effect size (Cliff's δ) for chemical vs rapid-cryo preservation across the metric suite.
+      Red = larger under chemical fixation, blue = larger under cryo. Hover any cell.</p>
+      <div id="chartMatrix"></div>
     </div>
   </div>
 </section>
