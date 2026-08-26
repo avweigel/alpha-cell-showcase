@@ -169,25 +169,38 @@ if (location.protocol === 'file:') {
     stores energy and detoxifies, run by <b>hundreds of millions of cells</b>. We take a tiny piece of it,
     smaller than a grain of salt, and preserve it in an instant, so that everything inside stops mid-motion,
     exactly where it was in life.</p>
-    <div class="card" style="max-width:880px">
-      <div style="display:flex;align-items:center;gap:6px;padding:26px 20px 10px;flex-wrap:wrap;justify-content:center">
-        <img src="assets/img/br/mouse.png" alt="Mouse" style="width:230px;max-width:34%">
-        <span style="color:#5eb1ff;font-size:1.6rem">&rarr;</span>
-        <div style="text-align:center">
-          <img src="assets/img/br/liver.png" alt="The liver" style="width:190px;max-width:28%;min-width:120px">
-          <div style="color:var(--dim);font-size:.82rem;margin-top:2px">the liver</div>
-        </div>
-        <span style="color:#5eb1ff;font-size:1.6rem">&rarr;</span>
-        <div style="text-align:center">
-          <svg viewBox="0 0 110 130" style="width:96px;display:block;margin:0 auto">
-            <path d="M10 38 l45 -18 l45 18 l0 52 l-45 18 l-45 -18 z" fill="#1b2c44" stroke="#5eb1ff" stroke-width="2"/>
-            <path d="M10 38 l45 -18 l45 18 l-45 18 z" fill="#2a4266" stroke="#5eb1ff" stroke-width="1.5"/>
-            <path d="M55 56 l0 52" stroke="#5eb1ff" stroke-width="1"/>
-          </svg>
-          <div style="color:var(--dim);font-size:.82rem;margin-top:2px">a piece smaller<br>than a grain of salt</div>
-        </div>
-      </div>
+    <div class="card" style="max-width:960px">
+      <svg viewBox="0 0 1200 400" style="width:100%;height:auto;display:block" role="img"
+           aria-label="From the mouse, to its liver, to a tiny sampled piece">
+        <!-- beam: mini-liver -> big liver -->
+        <polygon points="213,158 644,88 644,256 213,200" fill="#ffb35e" opacity="0.07"/>
+        <line x1="213" y1="158" x2="644" y2="88" stroke="#ffb35e" stroke-width="1.6" opacity="0.75"/>
+        <line x1="213" y1="200" x2="644" y2="256" stroke="#ffb35e" stroke-width="1.6" opacity="0.75"/>
+        <!-- beam: liver patch -> cube -->
+        <polygon points="852,142 1006,126 1006,272 852,176" fill="#ffb35e" opacity="0.07"/>
+        <line x1="852" y1="142" x2="1006" y2="126" stroke="#ffb35e" stroke-width="1.6" opacity="0.75"/>
+        <line x1="852" y1="176" x2="1006" y2="272" stroke="#ffb35e" stroke-width="1.6" opacity="0.75"/>
+        <!-- mouse with mini liver inside -->
+        <image href="assets/img/br/mouse.png" x="30" y="80" width="390" height="211"/>
+        <image href="assets/img/br/liver.png" x="152" y="156" width="58" height="43"/>
+        <ellipse cx="181" cy="178" rx="34" ry="25" fill="none" stroke="#ffb35e" stroke-width="2"/>
+        <!-- big liver with sampled patch -->
+        <image href="assets/img/br/liver.png" x="640" y="70" width="240" height="180"/>
+        <rect x="806" y="142" width="46" height="34" fill="none" stroke="#ffb35e" stroke-width="2.2" rx="3"/>
+        <!-- cube -->
+        <g transform="translate(1006,120)">
+          <path d="M0 38 l77 -31 l77 31 l0 88 l-77 31 l-77 -31 z" fill="#1b2c44" stroke="#5eb1ff" stroke-width="2.4"/>
+          <path d="M0 38 l77 -31 l77 31 l-77 31 z" fill="#2a4266" stroke="#5eb1ff" stroke-width="1.8"/>
+          <path d="M77 69 l0 88" stroke="#5eb1ff" stroke-width="1.2"/>
+        </g>
+        <!-- labels -->
+        <text x="225" y="330" text-anchor="middle" fill="#8fa2bd" font-size="17">the mouse</text>
+        <text x="760" y="330" text-anchor="middle" fill="#8fa2bd" font-size="17">its liver</text>
+        <text x="1083" y="330" text-anchor="middle" fill="#8fa2bd" font-size="17">the piece we image —</text>
+        <text x="1083" y="352" text-anchor="middle" fill="#8fa2bd" font-size="17">smaller than a grain of salt</text>
+      </svg>
       <div class="body"><div class="meta" style="font-size:.78rem;color:var(--muted)">Illustrations created in BioRender.com</div></div>
+    </div>
     </div>
     </div>
     <div class="modal-chips">
