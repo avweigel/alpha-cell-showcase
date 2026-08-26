@@ -1,6 +1,6 @@
 # Alpha Cell — data showcase
 
-![Inside a human macrophage: nuclear envelope studded with pores, ER sheets, lysosome, microtubule — every organelle segmented from FIB-SEM](assets/img/readme_hero.jpg)
+![From raw electron microscopy to labeled voxels, organelle meshes, measured membranes, and whole tissue](assets/img/readme_hero.jpg)
 
 A visual showcase of what modern volume electron microscopy data is and what it
 makes possible, built for Alpha Cell presentations and discussions. Everything
