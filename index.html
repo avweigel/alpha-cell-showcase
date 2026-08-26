@@ -276,6 +276,8 @@
       <span class="chip" style="background:#6a3fd4"></span>endosome
       <span class="chip" style="background:#d4568f"></span>vesicle
       <span class="chip" style="background:#0da8a2"></span>peroxisome
+      <span class="chip" style="background:#c22f43"></span>microtubule
+      <span class="chip" style="background:#7fd0ff"></span>nuclear pore
     </p>
 
     <div class="grid two" style="margin-top:14px">
@@ -301,6 +303,31 @@
           <div class="meta">A Golgi stack with ER, endosomes and a crowd of vesicles around the
           nucleus — jrc_mus-liver ground truth (crop143), 4 nm voxels.</div>
           <span class="scale">≈ 0.8 × 0.8 × 0.8 µm</span>
+        </div>
+      </div>
+      <div class="card">
+        <model-viewer src="assets/glb/macrophage_organelles.glb"
+          camera-controls auto-rotate auto-rotate-delay="1500" exposure="0.85" tone-mapping="neutral"
+          interaction-prompt="none" loading="lazy"></model-viewer>
+        <div class="hint">drag · scroll · pan</div>
+        <div class="body">
+          <h3>A human immune cell, annotated</h3>
+          <div class="meta">Macrophage (jrc_macrophage-2, CellMap Segmentation Challenge training data,
+          2 nm voxels): find the nuclear pores studding the envelope, the ER sheets, a microtubule,
+          lysosomes and endosomes.</div>
+          <span class="scale">≈ 2.0 × 1.0 × 2.0 µm</span>
+        </div>
+      </div>
+      <div class="card">
+        <model-viewer src="assets/glb/hela_organelles.glb"
+          camera-controls auto-rotate auto-rotate-delay="1500" exposure="0.85" tone-mapping="neutral"
+          interaction-prompt="none" loading="lazy"></model-viewer>
+        <div class="hint">drag · scroll · pan</div>
+        <div class="body">
+          <h3>HeLa, around the nucleus</h3>
+          <div class="meta">Human HeLa cell (jrc_hela-2, challenge training data): nucleus with pores,
+          mitochondria, ER network, endosomes and microtubules in one 2 nm-voxel scene.</div>
+          <span class="scale">≈ 1.6 × 1.6 × 2.1 µm</span>
         </div>
       </div>
     </div>

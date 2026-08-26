@@ -1,6 +1,6 @@
 # Alpha Cell — data showcase
 
-![A Golgi stack, ER, endosomes and vesicles from the mouse liver ground truth — every organelle segmented](assets/img/readme_hero.jpg)
+![Inside a human macrophage: nuclear envelope studded with pores, ER sheets, lysosome, microtubule — every organelle segmented from FIB-SEM](assets/img/readme_hero.jpg)
 
 A visual showcase of what modern volume electron microscopy data is and what it
 makes possible, built for Alpha Cell presentations and discussions. Everything
@@ -56,7 +56,7 @@ That's it. No dependencies, no build step.
 
 Meshes and charts come from CellMap ground-truth segmentations of public mouse
 datasets (liver, kidney, heart, cortex — chemical vs rapid-cryo preservation),
-all browsable on [OpenOrganelle](https://openorganelle.janelia.org). The
+all browsable on [OpenOrganelle](https://openorganelle.janelia.org). The organelle scenes come from the public [CellMap Segmentation Challenge](https://cellmapchallenge.janelia.org) training data. The
 membrane analyses, the stylet reconstruction, and the zonation work are from
 manuscripts in preparation — please don't redistribute outside the group for
 now. The raw datasets are fully public.
