@@ -66,7 +66,29 @@
 <div id="fileWarn" style="display:none;background:#3a2a12;border-bottom:1px solid #6b4a1a;color:#ffd9a0;padding:12px 24px;font-size:.9rem;text-align:center">
 The interactive 3D models can't load when this page is opened as a plain file.
 Double-click <b>Open&nbsp;showcase.command</b> in this folder instead (or use the web link) and everything works.</div>
-<script>if (location.protocol === 'file:') document.getElementById('fileWarn').style.display = 'block';</script>
+<script>
+if (location.protocol === 'file:') {
+  document.getElementById('fileWarn').style.display = 'block';
+  // Overlay every 3D viewer so a static poster can't be mistaken for a frozen model
+  window.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('model-viewer').forEach(function (mv) {
+      var wrap = document.createElement('div');
+      wrap.style.cssText = 'position:relative;display:block';
+      mv.parentNode.insertBefore(wrap, mv);
+      wrap.appendChild(mv);
+      var ov = document.createElement('div');
+      ov.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;' +
+        'background:rgba(10,14,20,.55);z-index:5;pointer-events:none;text-align:center;padding:16px';
+      ov.innerHTML = '<div style="background:#3a2a12;border:1px solid #6b4a1a;color:#ffd9a0;' +
+        'border-radius:10px;padding:10px 16px;font-size:.85rem;max-width:340px;line-height:1.45">' +
+        '<b>Preview only — not interactive.</b><br>To spin &amp; zoom this model, close this tab and ' +
+        'double-click <b>Open&nbsp;showcase.command</b> in the repo folder.</div>';
+      ov.setAttribute('data-file-overlay', '');
+      wrap.appendChild(ov);
+    });
+  });
+}
+</script>
 <div id="tt" class="tt"></div>
 
 <header>
