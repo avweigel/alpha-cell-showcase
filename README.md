@@ -1,64 +1,62 @@
 # Alpha Cell — data showcase
 
-![Membrane surfaces from FIB-SEM volumes](assets/img/readme_banner.jpg)
+![An entire liver acinus, every cell segmented, colored from central to portal vein](assets/img/zonation_acinus.jpg)
 
 A visual showcase of what modern volume electron microscopy data is and what it
 makes possible, built for Alpha Cell presentations and discussions. Everything
 on the page is real segmented data from the Janelia CellMap / OpenOrganelle
 collection — nothing is an illustration.
 
-**Open `index.html`** — it works two ways:
+## How to open it
 
-- **Locally**: double-click `index.html`. Everything (viewer library, meshes,
-  movie, charts) is in the repo, so it works offline.
-- **On the web**: enable GitHub Pages (Settings → Pages → Deploy from branch →
-  `main`, root) and share the URL.
+**The showcase is a single web page: `index.html`.**
 
-<table>
-<tr>
-<td width="40%"><img src="assets/img/readme_turntable.gif" alt="Liver bile canaliculus membrane, colored by contact gap"></td>
-<td width="60%"><img src="assets/img/readme_matrix.jpg" alt="Effect-size matrix: chemical vs rapid-cryo preservation across the metric suite"></td>
-</tr>
-<tr>
-<td><sub>Every model is interactive on the page — this one is colored by the local distance to the neighboring cell.</sub></td>
-<td><sub>And every surface is measurable: the full metric suite, region by region, with per-cell statistics on hover.</sub></td>
-</tr>
-</table>
+- **On your computer**: download or clone this repo, then **double-click
+  `index.html`** — it opens in your browser. Everything (3D viewer, meshes,
+  movies, charts) is inside the repo, so it works offline with no install and
+  no server.
+- **On the web**: if GitHub Pages is enabled for this repo, the same page is
+  live at the repo's Pages URL — nothing to download.
 
-## The page, in order
+That's it. No dependencies, no build step.
+
+## What's on the page
 
 1. **Opener** — a two-minute FIB-SEM fly-through of a mosquito stylet, from raw
    EM to the fully segmented reconstruction.
 2. **Scale** — one dataset spans six orders of magnitude, from whole tissue to
-   the lipid bilayer; includes links to fly through the public volumes in
+   the lipid bilayer, with links to fly through the public volumes in
    Neuroglancer.
 3. **Resolution** — interactive 3D membrane models at 4–8 nm voxel size (drag,
    zoom, pan).
 4. **Quantification** — surfaces colored by measurement (contact gap, curvature,
-   protrusions) plus live charts built from the analysis results: ECS width,
-   contact fractions, and a full effect-size matrix comparing chemical vs
-   rapid-cryo preservation.
-5. **Workflow** — from organ to numbers: tissue → preserve → FIB-SEM → segment
+   protrusions) plus live charts from the analysis: ECS width, contact
+   fractions, and an effect-size matrix comparing chemical vs rapid-cryo
+   preservation.
+5. **Liver zonation & beyond** — an entire acinus with every cell and organelle
+   segmented, nuclear pore densities across the tissue, and plasmodesmata in
+   plant tissue.
+6. **Workflow** — from organ to numbers: tissue → preserve → FIB-SEM → segment
    → measure.
-6. **More to explore** — turntable loops (good for slides), all 14 interactive
+7. **More to explore** — turntable loops (good for slides), all 14 interactive
    models, and a stills gallery.
 
-## What's inside
+## Repo contents
 
 | Path | Contents |
 | :-- | :-- |
-| `index.html` | The whole showcase — self-contained, no CDN, no build step |
-| `assets/glb/` | Vertex-colored membrane meshes (glb), ~36 MB |
-| `assets/video/` | Stylet fly-through (web transcode) + turntable MP4s |
+| `index.html` | The whole showcase — self-contained |
+| `assets/glb/` | Vertex-colored membrane meshes |
+| `assets/video/` | Fly-throughs and turntable loops |
 | `assets/img/` | Posters and rendered stills |
-| `vendor/` | `<model-viewer>` UMD build (offline-safe) |
-| `pipeline/render_meshes.py` | Render pipeline (trimesh + PyVista): PCA face-on camera, camera lighting, stills + turntables |
+| `vendor/` | `<model-viewer>` library (bundled, no CDN) |
+| `pipeline/render_meshes.py` | Mesh render pipeline (trimesh + PyVista) |
 
 ## Provenance
 
-Meshes and charts come from CellMap ground-truth segmentations of eight public
-mouse datasets (liver, kidney, heart, cortex — chemical vs rapid-cryo
-preservation), all browsable on
-[OpenOrganelle](https://openorganelle.janelia.org). The membrane analyses and
-the stylet reconstruction are from manuscripts in preparation — please don't
-redistribute outside the group for now. The raw datasets are fully public.
+Meshes and charts come from CellMap ground-truth segmentations of public mouse
+datasets (liver, kidney, heart, cortex — chemical vs rapid-cryo preservation),
+all browsable on [OpenOrganelle](https://openorganelle.janelia.org). The
+membrane analyses, the stylet reconstruction, and the zonation work are from
+manuscripts in preparation — please don't redistribute outside the group for
+now. The raw datasets are fully public.
