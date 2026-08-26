@@ -1,6 +1,6 @@
 # Alpha Cell — data showcase
 
-![An entire liver acinus, every cell segmented, colored from central to portal vein](assets/img/zonation_acinus.jpg)
+![A Golgi stack, ER, endosomes and vesicles from the mouse liver ground truth — every organelle segmented](assets/img/readme_hero.jpg)
 
 A visual showcase of what modern volume electron microscopy data is and what it
 makes possible, built for Alpha Cell presentations and discussions. Everything
