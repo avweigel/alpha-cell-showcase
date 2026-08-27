@@ -454,11 +454,13 @@ if (location.protocol === 'file:') {
     <p class="kicker">Chapter 6 · Now run it backwards</p>
     <h2>From seeing to understanding — the virtual cell</h2>
     <p class="blurb">We just went from an organ to a single membrane, and everything along the way was
-    <b>measured</b>. Millions of cells, billions of measurements. Feed all of it — this 3D anatomy, the
-    Human Protein Atlas's maps of where every protein lives, movies of living cells, close-ups of single
-    molecules — to AI, and something new becomes possible: <b>a cell you can simulate.</b> Ask it what
-    happens when a drug arrives or a gene breaks — before doing a single experiment.
-    That is what <b>Alpha Cell</b> is building, in Sweden, now.</p>
+    <b>measured</b>. That is the seeing. The understanding is <b>Alpha Cell</b>, being built in Sweden
+    now: teach AI how a human cell is organized in <b>space</b> — where each of its thousands of
+    proteins lives, with the Human Protein Atlas as the foundation — and how it changes in
+    <b>time</b> — following living cells all the way through division. The work starts in a
+    well-studied human cell line (U2OS), then moves into stem cells. Put space and time together, and
+    something new becomes possible: <b>a cell you can simulate.</b> Ask it what happens when a drug
+    arrives or a gene breaks — before doing a single experiment.</p>
 
     <div class="card" style="max-width:860px">
       <svg class="cartsvg" viewBox="0 0 860 420" role="img" aria-label="The Alpha Cell loop: measure, learn, predict, decide what to measure next">
@@ -475,7 +477,7 @@ if (location.protocol === 'file:') {
         <g transform="translate(160,80)">
           <rect x="0" y="0" width="180" height="86" rx="14" fill="#16243a" stroke="#3a4f70" stroke-width="2"/>
           <text x="90" y="34" text-anchor="middle" fill="#dce6f5" font-size="16" font-weight="650">Measure cells</text>
-          <text x="90" y="58" text-anchor="middle" class="clab">microscopes map real cells</text>
+          <text x="90" y="58" text-anchor="middle" class="clab">where proteins live · how cells divide</text>
         </g>
         <!-- node: learn -->
         <g transform="translate(560,80)">
@@ -597,8 +599,8 @@ if (location.protocol === 'file:') {
       meta:'Real mitochondria from an imaged cell. Not the lonely bean of the textbook: they connect into sprawling networks.'},
     er:{label:'ER', title:'The endoplasmic reticulum — the factory floor', type:'video', src:'assets/video/er_network.mp4', poster:'assets/img/poster_er_network.jpg',
       meta:'The real ER: a continuous maze of sheets and tubes where the cell makes its proteins and fats.'},
-    golgi:{label:'Golgi', title:'The Golgi — the shipping department', type:'video', src:'assets/video/golgi_flythrough.mp4', poster:'assets/img/poster_golgi_flythrough.jpg',
-      meta:'The real Golgi, stack by stack, with its cloud of transport bubbles. Proteins get sorted, addressed and shipped from here.'},
+    golgi:{label:'Golgi', title:'The Golgi — the shipping department', type:'mv', src:'assets/glb/liver_organelles_golgi.glb', poster:'assets/img/poster_golgi.jpg',
+      meta:'A real Golgi stack from mouse liver, hand-annotated by our team — spin it to see the stacked membranes and the crowd of transport vesicles around them.'},
     lyso:{label:'Lysosome', title:'Lysosomes — the recycling plants', type:'mv', src:'assets/glb/macrophage_organelles.glb', poster:'assets/img/poster_macrophage.jpg',
       meta:'Spin this real immune cell and find the orange blobs: lysosomes, where the cell breaks down and recycles its waste.'},
     ld:{label:'Fat droplet', title:'Lipid droplets — the pantry', type:'video', src:'assets/video/hepatocyte_wholecell.mp4', poster:'assets/img/poster_hepatocyte_wholecell.jpg',
