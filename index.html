@@ -431,19 +431,62 @@ if (location.protocol === 'file:') {
   </div>
 </section>
 
+<!-- ================= CH 6 · TIME ================= -->
+<section class="ch" id="time" data-rpos="-1" data-anchor="">
+  <div class="wrap">
+    <p class="kicker">Chapter 6 &middot; Now add time</p>
+    <h2>The missing dimension: time<span class="real">real data</span></h2>
+    <p class="blurb">Every image on this journey is a snapshot: exquisite structure, frozen at one
+    instant. But living cells move. These movies follow a <b>living mouse embryo</b> through its very
+    first hours, division by division. This is the dimension Alpha Cell will measure next, alongside
+    space: cells followed live through their whole division cycle.</p>
+    <div class="grid two">
+      <div class="card">
+        <video src="assets/video/time_first_divisions.mp4" poster="assets/img/poster_time_first_divisions.jpg" autoplay loop muted playsinline style="aspect-ratio:1/1"></video>
+        <div class="body">
+          <h3>One cell becomes two, two become four</h3>
+          <div class="meta">34 hours of a living embryo in a light-sheet microscope: membranes in blue,
+          chromosomes in orange, and in green a checkpoint protein called Mad2 that stands guard over
+          every division. Ellenberg lab, EMBL.</div>
+        </div>
+      </div>
+      <div class="card">
+        <video src="assets/video/time_first_decision.mp4" poster="assets/img/poster_time_first_decision.jpg" autoplay loop muted playsinline style="aspect-ratio:1/1" loading="lazy"></video>
+        <div class="body">
+          <h3>The first decision</h3>
+          <div class="meta">Watch every nucleus as the embryo grows to 32 cells; by then each cell has
+          chosen a side. Red cells will become the body. Blue cells will become the placenta. Followed
+          live, division by division. Ellenberg lab, EMBL.</div>
+        </div>
+      </div>
+    </div>
+
+    <details class="more"><summary>The very first division holds a surprise</summary><div class="inner">
+      <p class="meta" style="margin-top:8px;max-width:720px">At the very first division after
+      fertilization, the chromosomes from mother and father do not mix. Each parental genome builds its
+      own spindle, and the two sets stay apart while the cell divides, only merging later. Nobody
+      assumed this; it was discovered by watching living embryos, and it matters, because when the two
+      spindles misalign, the embryo can end up with cells carrying broken genomes. The kind of surprise
+      only time-lapse imaging can catch.</p>
+      <video src="assets/video/time_two_genomes.mp4" autoplay loop muted playsinline style="max-width:700px;border-radius:10px;margin-top:10px"></video>
+      <p class="meta" style="margin-top:8px">Chromosomes in grey, the two parental genomes tracked in
+      color. Ellenberg lab, EMBL.</p>
+    </div></details>
+  </div>
+</section>
+
 <!-- ================= CH 6 · REVERSAL ================= -->
 <section class="ch" id="reversal" data-rpos="-1" data-anchor="">
   <div class="wrap">
-    <p class="kicker">Chapter 6 · Now run it backwards</p>
+    <p class="kicker">Chapter 7 · Now run it backwards</p>
     <h2>From seeing to understanding — the virtual cell</h2>
-    <p class="blurb">The journey you just took was through structure: a snapshot of one frozen
-    moment, with no protein names attached. <b>Alpha Cell</b> works on the missing dimensions.
-    <b>Space</b>: where each of a cell's thousands of proteins lives, building on twenty years of the
-    Human Protein Atlas. <b>Time</b>: how a living cell changes, followed through its whole division
-    cycle. The measurements start in U2OS, a human cell line researchers know well, then move to stem
-    cells. Together they become training data for AI models of the cell. The aim: ask the model what
-    happens when a drug arrives or a gene breaks, get an answer in molecular terms, and check it
-    against reality.</p>
+    <p class="blurb"><b>Alpha Cell</b> puts the two dimensions together. <b>Space</b>: where
+    each of a cell's thousands of proteins lives, building on twenty years of the Human Protein Atlas.
+    <b>Time</b>: living cells followed through their whole division cycle, as in the movies above. The
+    measurements start in U2OS, a human cell line researchers know well, then move to stem cells.
+    Together they become training data for AI models of the cell. The aim: ask the model what happens
+    when a drug arrives or a gene breaks, get an answer in molecular terms, and check it against
+    reality.</p>
 
     <div class="card" style="max-width:860px">
       <svg class="cartsvg" viewBox="0 0 860 520" role="img" aria-label="The Alpha Cell loop: map the cell, train the model, predict and explain, find the gaps — all revolving around the virtual cell">
