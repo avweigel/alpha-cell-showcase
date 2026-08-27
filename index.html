@@ -443,10 +443,12 @@ if (location.protocol === 'file:') {
     <b>time</b> — following living cells all the way through division. The work starts in a
     well-studied human cell line (U2OS), then moves into stem cells. Put space and time together, and
     something new becomes possible: <b>a cell you can simulate.</b> Ask it what happens when a drug
-    arrives or a gene breaks — before doing a single experiment.</p>
+    arrives or a gene breaks — before doing a single experiment — and have it <b>explain why</b>, in
+    molecular terms. That understanding is the long game: catching disease at its very beginning, and
+    one day steering sick cells back to health.</p>
 
     <div class="card" style="max-width:860px">
-      <svg class="cartsvg" viewBox="0 0 860 520" role="img" aria-label="The Alpha Cell loop: measure, learn, predict, decide what to measure next — all revolving around the virtual cell">
+      <svg class="cartsvg" viewBox="0 0 860 520" role="img" aria-label="The Alpha Cell loop: map the cell, train the model, predict and explain, find the gaps — all revolving around the virtual cell">
         <defs>
           <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto">
             <path d="M0 0 L10 5 L0 10 z" fill="#5eb1ff"/></marker>
@@ -459,7 +461,8 @@ if (location.protocol === 'file:') {
         <!-- center: the virtual cell (her cartoon, becoming real) -->
         <circle cx="430" cy="252" r="160" fill="url(#cellglow)"/>
         <image href="assets/img/br/cell.png" x="325" y="147" width="210" height="210"/>
-        <text x="430" y="392" text-anchor="middle" fill="#8fa2bd" font-size="15" font-style="italic">the virtual cell</text>
+        <text x="430" y="390" text-anchor="middle" fill="#8fa2bd" font-size="15" font-style="italic">the virtual cell</text>
+        <text x="430" y="413" text-anchor="middle" fill="#6b7d99" font-size="12.5">predict it · explain it · learn to steer it</text>
         <!-- loop arrows, clockwise -->
         <g fill="none" stroke="#5eb1ff" stroke-width="3">
           <path d="M282 62 Q430 24 578 62" marker-end="url(#arr3)"/>
@@ -470,30 +473,31 @@ if (location.protocol === 'file:') {
         <!-- node: measure -->
         <g transform="translate(48,36)">
           <rect x="0" y="0" width="224" height="76" rx="14" fill="#16243a" stroke="#3a4f70" stroke-width="2"/>
-          <text x="112" y="31" text-anchor="middle" fill="#dce6f5" font-size="17" font-weight="650">Measure cells</text>
-          <text x="112" y="56" text-anchor="middle" class="clab">protein maps · division movies</text>
+          <text x="112" y="31" text-anchor="middle" fill="#dce6f5" font-size="17" font-weight="650">Map the cell</text>
+          <text x="112" y="56" text-anchor="middle" class="clab">where proteins live · how cells change</text>
         </g>
         <!-- node: learn -->
         <g transform="translate(588,36)">
           <rect x="0" y="0" width="224" height="76" rx="14" fill="#16243a" stroke="#3a4f70" stroke-width="2"/>
-          <text x="112" y="31" text-anchor="middle" fill="#dce6f5" font-size="17" font-weight="650">Teach the AI</text>
-          <text x="112" y="56" text-anchor="middle" class="clab">it learns how cells are built</text>
+          <text x="112" y="31" text-anchor="middle" fill="#dce6f5" font-size="17" font-weight="650">Train the model</text>
+          <text x="112" y="56" text-anchor="middle" class="clab">a foundation model of the cell</text>
         </g>
         <!-- node: predict -->
         <g transform="translate(588,408)">
           <rect x="0" y="0" width="224" height="76" rx="14" fill="#16243a" stroke="#ffb35e" stroke-width="2.5"/>
-          <text x="112" y="31" text-anchor="middle" fill="#ffd9a0" font-size="17" font-weight="650">Predict</text>
-          <text x="112" y="56" text-anchor="middle" class="clab">simulate before experimenting</text>
+          <text x="112" y="31" text-anchor="middle" fill="#ffd9a0" font-size="17" font-weight="650">Predict &amp; explain</text>
+          <text x="112" y="56" text-anchor="middle" class="clab">in molecular terms, in silico</text>
         </g>
         <!-- node: decide -->
         <g transform="translate(48,408)">
           <rect x="0" y="0" width="224" height="76" rx="14" fill="#16243a" stroke="#3a4f70" stroke-width="2"/>
-          <text x="112" y="31" text-anchor="middle" fill="#dce6f5" font-size="17" font-weight="650">Aim the microscopes</text>
-          <text x="112" y="56" text-anchor="middle" class="clab">measure what the model needs</text>
+          <text x="112" y="31" text-anchor="middle" fill="#dce6f5" font-size="17" font-weight="650">Find the gaps</text>
+          <text x="112" y="56" text-anchor="middle" class="clab">the model picks what to measure next</text>
         </g>
       </svg>
-      <div class="body"><div class="meta">Alpha Cell, SciLifeLab's national research program: mapping human
-      cells at molecular detail and teaching AI to predict them.</div></div>
+      <div class="body"><div class="meta">The loop scientists call "lab in the loop": each round of measurements
+      improves the model, and the model tells us which measurement matters most next. Alpha Cell is
+      SciLifeLab's flagship program, coordinated with the Human Protein Atlas.</div></div>
     </div>
 
     <details class="more"><summary>Being honest: what one microscope cannot see</summary><div class="inner">
