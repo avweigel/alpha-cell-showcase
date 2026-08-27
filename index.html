@@ -401,49 +401,32 @@ if (location.protocol === 'file:') {
   </div>
 </section>
 
-<!-- ================= CH 5 · MEMBRANE ================= -->
-<section class="ch" id="membrane" data-rpos="0.80" data-anchor="≈ 10,000× thinner than a hair">
+<!-- ================= CH 5 · TAKE IT APART ================= -->
+<section class="ch" id="pieces" data-rpos="-1" data-anchor="">
   <div class="wrap">
-    <p class="kicker">Chapter 5 · The membrane</p>
-    <span class="scalebadge">≈ 10 nanometers — journey's end</span>
-    <h2>Where pictures become numbers<span class="real">real data</span></h2>
-    <p class="blurb">Zoom all the way in and you reach the membrane — the cell's skin, ten thousand
-    times thinner than a hair. And here is the point of the whole journey: at this resolution a picture
-    stops being just a picture. <b>The colors below aren't decoration — they are measurements</b>,
-    made at every point on a real membrane.</p>
-    <div class="grid two">
-      <div class="card">
-        <model-viewer src="assets/glb/crop1072_gap.glb" poster="assets/img/crop1072_gap_sideA.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none"></model-viewer>
-        <div class="hint">drag · scroll · pan</div>
-        <div class="body">
-          <h3>How close is the neighbor?</h3>
-          <div class="meta">A real liver-cell membrane, colored by the distance to the cell next door —
-          bright where they nearly touch, dark where a channel opens between them.</div>
-        </div>
-      </div>
-      <div class="card">
-        <model-viewer src="assets/glb/crop1144_deviation.glb" poster="assets/img/crop1144_deviation_sideA.jpg"
-          camera-controls auto-rotate auto-rotate-delay="1500" exposure="1.1" interaction-prompt="none" loading="lazy"></model-viewer>
-        <div class="hint">drag · scroll · pan</div>
-        <div class="body">
-          <h3>Every bump, counted</h3>
-          <div class="meta">A kidney-cell membrane, colored by its bumps and dips — each protrusion
-          detected, measured, countable.</div>
-        </div>
-      </div>
+    <p class="kicker">Chapter 5 · Now take it apart</p>
+    <h2>One scan, every piece<span class="real">real data</span></h2>
+    <p class="blurb">Everything on this journey came out of <b>one dataset</b> — and because every
+    point in it is labeled, that dataset works like a kit. Ask for only the blood vessels, and you get
+    them. Only the nuclei. Every mitochondrion — <b>all 1.3 million of them</b>. Watch the same liver
+    block from chapter 2 come apart, piece by piece:</p>
+    <div class="card">
+      <video src="assets/video/liver_pieces.mp4" poster="assets/img/poster_liver_pieces.jpg" autoplay loop muted playsinline style="aspect-ratio:16/9"></video>
+      <div class="body"><div class="meta">The liver dataset, disassembled: the blood supply, the bile
+      drainage network, 1,897 nuclei, 1.3 million mitochondria, 49,801 lipid droplets, ~27,000
+      peroxisomes — every piece lifted straight out of the same segmentation, nothing drawn by
+      hand.</div></div>
     </div>
 
-    <details class="more"><summary>What do the numbers say? One example</summary><div class="inner">
-      <p class="meta" style="margin-top:8px;max-width:700px">Because everything is measured, you can ask
-      quantitative questions. One example: how wide is the gap between neighboring cells? It depends on
-      how the tissue was preserved — cells prepared with the fast-freezing method sit measurably closer
-      together than chemically fixed ones. Knowing that is how we choose the methods that show cells
-      as they truly are.</p>
-      <div id="gapChart" style="max-width:700px"></div>
-      <div class="legend"><span><span class="chip" style="background:var(--chem)"></span>chemical preservation</span>
-      <span><span class="chip" style="background:var(--cryo)"></span>fast frozen</span>
-      <span style="color:var(--muted)">each dot = one measured tissue volume · hover for details</span></div>
+    <details class="more"><summary>What do you do with the pieces?</summary><div class="inner">
+      <p class="meta" style="margin-top:8px;max-width:720px">Once a structure is extracted it stops
+      being a picture and becomes a list — objects you can count, measure, and compare. How many
+      mitochondria does a cell keep near a big vein versus far from one? How much fat does each cell
+      store? How far is any point in the tissue from the nearest blood supply? Those are the questions
+      this data was made to answer. And the precision holds all the way down: at the very bottom of the
+      scale even the gap between two neighboring cells — a few tens of nanometers — is a measurement,
+      sharp enough to show that fast-frozen tissue keeps cells measurably closer together than chemical
+      preservation. Knowing that is how we choose the methods that show cells as they truly are.</p>
     </div></details>
   </div>
 </section>
@@ -453,8 +436,8 @@ if (location.protocol === 'file:') {
   <div class="wrap">
     <p class="kicker">Chapter 6 · Now run it backwards</p>
     <h2>From seeing to understanding — the virtual cell</h2>
-    <p class="blurb">We just went from an organ to a single membrane, and everything along the way was
-    <b>measured</b>. That is the seeing. The understanding is <b>Alpha Cell</b>, being built in Sweden
+    <p class="blurb">We just zoomed from a whole organ into the machinery of a single cell — and then took
+    the data apart piece by piece. Everything along the way was <b>measured</b>. That is the seeing. The understanding is <b>Alpha Cell</b>, being built in Sweden
     now: teach AI how a human cell is organized in <b>space</b> — where each of its thousands of
     proteins lives, with the Human Protein Atlas as the foundation — and how it changes in
     <b>time</b> — following living cells all the way through division. The work starts in a
@@ -654,43 +637,7 @@ if (location.protocol === 'file:') {
   }
 })();
 
-// ---------- gap chart ----------
-(function(){
-  const D = JSON.parse(document.getElementById('gapdata').textContent);
-  const el = document.getElementById('gapChart'); if (!el) return;
-  const tt = document.getElementById('tt');
-  const CHEM = getComputedStyle(document.documentElement).getPropertyValue('--chem').trim();
-  const CRYO = getComputedStyle(document.documentElement).getPropertyValue('--cryo').trim();
-  const TISSUES = ['Liver','Kidney','Heart'];
-  const W = 660, LEFT = 70, RIGHT = 20, TOP = 14, ROW = 44;
-  const vmax = Math.max(...D.map(d=>d.v)) * 1.1;
-  const H = TOP + TISSUES.length*ROW + 36;
-  const X = v => LEFT + (W-LEFT-RIGHT)*v/vmax;
-  let s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" style="width:100%;height:auto">';
-  TISSUES.forEach((t,i)=>{
-    const y = TOP + i*ROW + ROW/2;
-    s += '<text x="0" y="' + (y+4) + '" fill="#dce6f5" font-size="13">' + t + '</text>';
-    s += '<line x1="' + LEFT + '" y1="' + y + '" x2="' + (W-RIGHT) + '" y2="' + y + '" stroke="#1f2d42"/>';
-    for (const d of D.filter(d=>d.tissue===t)){
-      const c = d.prep === 'Chemical' ? CHEM : CRYO;
-      const tip = '<b>' + d.crop + '</b> · ' + (d.prep==='Chemical'?'chemical preservation':'fast frozen') +
-                  '<br>typical cell-to-cell gap: ' + d.v + ' nm';
-      s += '<g data-tt="' + tip.replace(/"/g,'&quot;') + '">' +
-           '<circle cx="' + X(d.v) + '" cy="' + y + '" r="6" fill="' + c + '" stroke="#0d1420" stroke-width="1.4" opacity="0.9"/></g>';
-    }
-  });
-  const ay = TOP + TISSUES.length*ROW + 6;
-  s += '<line x1="' + LEFT + '" y1="' + ay + '" x2="' + (W-RIGHT) + '" y2="' + ay + '" stroke="#33455f"/>';
-  s += '<text x="' + LEFT + '" y="' + (ay+18) + '" fill="#6b7d99" font-size="11">0</text>';
-  s += '<text x="' + (W-RIGHT) + '" y="' + (ay+18) + '" fill="#6b7d99" font-size="11" text-anchor="end">' + Math.round(vmax/1.1) + ' nm — gap between neighboring cells</text>';
-  s += '</svg>';
-  el.innerHTML = s;
-  el.querySelectorAll('[data-tt]').forEach(n => {
-    n.addEventListener('mousemove', ev => { tt.innerHTML = n.dataset.tt; tt.style.opacity = 1;
-      tt.style.left = Math.min(ev.clientX + 14, innerWidth - 280) + 'px'; tt.style.top = (ev.clientY + 14) + 'px'; });
-    n.addEventListener('mouseleave', () => tt.style.opacity = 0);
-  });
-})();
+
 </script>
 </body>
 </html>
